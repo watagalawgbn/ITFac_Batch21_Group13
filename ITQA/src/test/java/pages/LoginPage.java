@@ -5,9 +5,10 @@ import org.openqa.selenium.WebDriver;
 import utils.ConfigReader;
 
 public class LoginPage {
-
     private final WebDriver driver;
-    private final By loginButton = By.xpath("//button[@type='submit']");
+    private final By usernameField = By.name("username");
+    private final By passwordField = By.name("password");
+    private final By loginButton   = By.xpath("//button[@type='submit']");
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
@@ -18,9 +19,11 @@ public class LoginPage {
         driver.get(url);
     }
 
-    public void loginAsAdmin(String username, String password) {
-        driver.findElement(By.name("username")).sendKeys(username);
-        driver.findElement(By.name("password")).sendKeys(password);
+    public DashboardPage login(String username, String password) {
+        driver.findElement(usernameField).sendKeys(username);
+        driver.findElement(passwordField).sendKeys(password);
         driver.findElement(loginButton).click();
+
+        return new DashboardPage(driver);
     }
 }

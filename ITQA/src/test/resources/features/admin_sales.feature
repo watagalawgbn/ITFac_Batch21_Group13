@@ -1,6 +1,6 @@
-Feature: Sales page smoke test
+Feature: Sales List Page
 
-  Scenario: Admin opens sales page
-    Given admin is logged in
-    When admin navigates to sales page
-    Then sales list should be displayed
+  Scenario: Admin can view the sales list page
+    Given Admin is logged in
+    When Admin navigates to the sales list page
+    Then Sales list should be displayed
