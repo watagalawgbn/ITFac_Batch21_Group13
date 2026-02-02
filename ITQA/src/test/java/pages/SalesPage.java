@@ -11,6 +11,7 @@ public class SalesPage {
     //locator for the sales table
     private final By salesTable = By.cssSelector("table.table-bordered.table-striped.align-middle");
     private final By noSalesMessage = By.xpath("//*[text() = 'No sales found']");
+    private final By sellPlantButton = By.xpath("//a[contains(text(), 'Sell Plant')]");
     public SalesPage(WebDriver driver){
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -31,5 +32,19 @@ public class SalesPage {
         } catch (Exception e){
             return false;
         }
+    }
+
+    public boolean isSellPlantButtonVisible(){
+        try{
+            wait.until(ExpectedConditions.visibilityOfElementLocated(sellPlantButton));
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+    }
+
+    public SellPlantPage clickSellPlantButton(){
+        wait.until(ExpectedConditions.elementToBeClickable(sellPlantButton)).click();
+        return new SellPlantPage(driver);
     }
 }
