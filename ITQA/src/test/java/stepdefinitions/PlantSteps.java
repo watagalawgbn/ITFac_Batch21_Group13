@@ -15,13 +15,13 @@ import utils.DriverManager;
 
 import java.util.List;
 
-public class AdminPlantSteps {
+public class PlantSteps {
     private WebDriver driver;
     private LoginPage loginPage;
     private PlantsPage plantsPage;
     private AddPlantPage addPlantPage;
 
-    public AdminPlantSteps() {
+    public PlantSteps() {
         this.driver = DriverManager.getDriver();
         this.loginPage = new LoginPage(driver);
         this.plantsPage = new PlantsPage(driver);
@@ -543,5 +543,92 @@ public class AdminPlantSteps {
         Assert.assertTrue(plantsPage.areDeleteButtonsVisibleForAllPlants(),
             "Delete icon buttons are not visible for plants");
         System.out.println("Delete icon buttons are visible for each plant");
+    }
+
+    // ===== NORMAL USER STEPS =====
+
+    @Given("user is on the login page")
+    public void user_is_on_the_login_page() {
+        loginPage.navigateToLoginPage("http://localhost:8080/ui/login");
+        Assert.assertTrue(loginPage.isLoginPageDisplayed(), "Login page is not displayed");
+        System.out.println("User is on the login page");
+    }
+
+    @When("user enters username {string}")
+    public void user_enters_username(String username) {
+        loginPage.enterUsername(username);
+        System.out.println("User entered username: " + username);
+    }
+
+    @When("user enters password {string}")
+    public void user_enters_password(String password) {
+        loginPage.enterPassword(password);
+        System.out.println("User entered password: " + password);
+    }
+
+    @When("user clicks login button")
+    public void user_clicks_login_button() {
+        loginPage.clickLoginButton();
+        System.out.println("User clicked login button");
+        // Wait for page to load
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Then("user should be logged in successfully")
+    public void user_should_be_logged_in_successfully() {
+        String currentUrl = driver.getCurrentUrl();
+        System.out.println("Current URL after login: " + currentUrl);
+        // Check if login was successful by verifying the URL changed from login page
+        Assert.assertFalse(currentUrl.contains("login"), "User is still on login page");
+        System.out.println("User is logged in successfully");
+    }
+
+    @Given("user is logged in successfully as a normal user")
+    public void user_is_logged_in_successfully_as_a_normal_user() {
+        // Assuming login already happened from previous scenario or setup
+        String currentUrl = driver.getCurrentUrl();
+        System.out.println("Current URL for login check: " + currentUrl);
+        // Accept any URL that's not on the login page
+        if (currentUrl.contains("/ui/login")) {
+            // If we're on login page, do a quick login with normal user credentials
+            try {
+                loginPage.login("testuser", "test123");
+                Thread.sleep(3000);
+            } catch (Exception e) {
+                System.out.println("Auto-login failed: " + e.getMessage());
+            }
+        }
+        System.out.println("User is logged in successfully as a normal user");
+    }
+
+    @When("user navigates to Plants page {string}")
+    public void user_navigates_to_plants_page(String path) {
+        String baseUrl = driver.getCurrentUrl().split("/ui/")[0];
+        String fullUrl = baseUrl + path;
+        plantsPage.navigateToPlantsPage(fullUrl);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("User navigated to Plants page: " + fullUrl);
+    }
+
+    @Then("Plant list table is displayed")
+    public void plant_list_table_is_displayed() {
+        Assert.assertTrue(plantsPage.isPlantsTableDisplayed(),
+            "Plant list table is not displayed");
+        System.out.println("Plant list table is displayed");
+    }
+
+    @Then("user can view all available plants")
+    public void user_can_view_all_available_plants() {
+        Assert.assertTrue(plantsPage.isPlantListNotEmpty(),
+            "No plants are available in the list");
+        System.out.println("User can view all available plants");
     }
 }

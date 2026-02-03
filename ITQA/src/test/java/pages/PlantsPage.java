@@ -198,5 +198,37 @@ public class PlantsPage {
             return false;
         }
     }
+
+    public boolean isPlantsTableDisplayed() {
+        try {
+            // Check if the plants table is visible on the page
+            java.util.List<WebElement> tables = driver.findElements(By.xpath("//table | //div[contains(@class, 'table')] | //div[contains(@class, 'grid')]"));
+            if (tables.isEmpty()) {
+                System.out.println("No table found on the plants page");
+                return false;
+            }
+            System.out.println("Plants table is displayed");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error checking plants table display: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean isPlantListNotEmpty() {
+        try {
+            // Check if there are any plant records in the table
+            java.util.List<WebElement> rows = driver.findElements(tableRows);
+            if (rows.isEmpty()) {
+                System.out.println("No plants found in the list");
+                return false;
+            }
+            System.out.println("Found " + rows.size() + " plants in the list");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error checking plant list: " + e.getMessage());
+            return false;
+        }
+    }
 }
 

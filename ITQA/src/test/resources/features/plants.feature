@@ -1,3 +1,4 @@
+@AdminTests
 Feature: Admin User Plant Management
 
   Background:
