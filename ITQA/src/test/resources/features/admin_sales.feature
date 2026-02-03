@@ -1,6 +1,29 @@
-Feature: Sales List Page
+Feature: Admin sales management
 
   Scenario: Admin can view the sales list page
     Given Admin is logged in
     When Admin navigates to the sales list page
     Then Sales list should be displayed
+
+  Scenario: Sell plant button is visible only to admin
+    Given Admin is logged in
+    When Admin navigates to the sales list page
+    Then Sell plant button should be visible
+
+  Scenario: Admin sees only plants with available stock
+    Given Admin is logged in
+    When Admin navigates to the sales list page
+    And Admin navigates to sell plant page
+    Then Plant dropdown show only plants with stock greater than zero
+
+  Scenario: Admin can create a sale with valid plant and quantity
+    Given Admin is logged in
+    When Admin navigates to the sales list page
+    And Admin navigates to sell plant page
+    And Admin selects a plant with available stock
+    And Admin enters a valid quantity
+    And Admin clicks the sell button
+    Then Sale should be created successfully
+    And Admin should be redirected to the sales list page
+
+
