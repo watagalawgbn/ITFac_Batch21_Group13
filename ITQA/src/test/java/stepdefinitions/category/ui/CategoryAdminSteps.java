@@ -166,24 +166,26 @@ public class CategoryAdminSteps {
     }
 
     @Then("admin should be navigated to the edit page when clicking an Edit icon")
-public void admin_navigates_to_edit_category_page() {
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+    public void admin_navigates_to_edit_category_page() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
-    // Wait for the table to appear
-    WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("table")));
+        // Wait for the table to appear
+        WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("table")));
 
-    // Find the first Edit button
-    WebElement editButton = table.findElement(By.xpath(".//a[@title='Edit' and contains(@class,'btn')]"));
+        // Find the first Edit button
+        WebElement editButton = table.findElement(By.xpath(".//a[@title='Edit' and contains(@class,'btn')]"));
 
-    // Click the Edit button
-    editButton.click();
+        // Click the Edit button
+        editButton.click();
 
-    // Wait for URL to contain '/ui/categories/edit/'
-    wait.until(ExpectedConditions.urlContains("/ui/categories/edit/"));
+        // Wait for URL to contain '/ui/categories/edit/'
+        wait.until(ExpectedConditions.urlContains("/ui/categories/edit/"));
 
-    // Assert URL contains 'edit'
-    String currentUrl = driver.getCurrentUrl();
-    Assert.assertTrue(currentUrl.contains("/ui/categories/edit/"), "Did not navigate to Edit Category page");
-}
+        // Assert URL contains 'edit'
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertTrue(currentUrl.contains("/ui/categories/edit/"), "Did not navigate to Edit Category page");
+    }
+
+    
 
 }
