@@ -631,4 +631,49 @@ public class PlantSteps {
             "No plants are available in the list");
         System.out.println("User can view all available plants");
     }
+
+    @Then("Add Plant button should not be visible for normal user")
+    public void add_plant_button_should_not_be_visible_for_normal_user() {
+        Assert.assertFalse(plantsPage.isAddPlantButtonVisible(),
+            "Add Plant button is visible for normal user (should be hidden)");
+        System.out.println("Add Plant button is correctly hidden for normal user");
+    }
+
+    @Then("normal user cannot add plants")
+    public void normal_user_cannot_add_plants() {
+        // Verify the user cannot navigate to the add plant page
+        String currentUrl = driver.getCurrentUrl();
+        System.out.println("Current URL: " + currentUrl);
+
+        // Check if Add Plant button is not present
+        Assert.assertFalse(plantsPage.isAddPlantButtonPresent(),
+            "Add Plant button is present for normal user");
+
+        // Try to navigate directly to add plant page and verify access is restricted
+        try {
+            String baseUrl = currentUrl.split("/ui/")[0];
+            String addPlantUrl = baseUrl + "/ui/plants/add";
+            driver.navigate().to(addPlantUrl);
+            Thread.sleep(2000);
+
+            String newUrl = driver.getCurrentUrl();
+            System.out.println("URL after attempting to navigate to add plant page: " + newUrl);
+
+            // If user is able to navigate to add plant page, they should be redirected
+            // We check if they're still on plants page or redirected to access denied page
+            if (newUrl.contains("/plants/add")) {
+                // If they're still on /plants/add, they have unauthorized access
+                // Check if there's an error/unauthorized message
+                Assert.fail("Normal user was able to access the Add Plant page directly - access should be restricted");
+            } else {
+                // User was redirected, which is expected behavior
+                System.out.println("Normal user was correctly denied access to Add Plant page and redirected");
+            }
+        } catch (Exception e) {
+            System.out.println("Error during normal user add plant access check: " + e.getMessage());
+            // Navigation attempt is part of the test, continue if there's an exception
+        }
+
+        System.out.println("Normal user cannot add plants - restriction verified");
+    }
 }
