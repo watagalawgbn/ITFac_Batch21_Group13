@@ -8,9 +8,12 @@ import io.cucumber.testng.CucumberOptions;
         glue = "stepdefinitions",
         plugin = {
                 "pretty",
-                "html:target/cucumber-reports.html"
+                "html:target/cucumber-reports.html",
+                "json:target/cucumber.json",
+                "junit:target/cucumber.xml"
         },
-        monochrome = true
+        monochrome = true,
+        tags = "@UI" // Run all UI tests, can be overridden with -Dcucumber.filter.tags
 )
 public class TestRunner extends AbstractTestNGCucumberTests {
 }
