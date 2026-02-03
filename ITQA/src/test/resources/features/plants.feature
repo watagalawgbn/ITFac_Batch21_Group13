@@ -80,3 +80,10 @@ Feature: Admin User Plant Management
     And plant should not be saved
     And user should remain on the Add Plant page "/ui/plants/add"
 
+  Scenario: Verify sub-category selection functionality in Add Plant form
+    Given admin user is logged in successfully
+    And admin user is on the Add Plant page "/ui/plants/add"
+    When admin user opens category dropdown
+    Then category dropdown should be opened
+    And only valid sub-categories should be displayed
+    And parent categories should not be displayed

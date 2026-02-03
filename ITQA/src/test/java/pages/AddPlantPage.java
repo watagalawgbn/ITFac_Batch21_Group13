@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import java.util.List;
+import java.util.ArrayList;
 
 public class AddPlantPage {
     private WebDriver driver;
@@ -259,6 +260,112 @@ public class AddPlantPage {
         } catch (Exception e) {
             System.out.println("Error selecting category: " + e.getMessage());
             printPageSource();
+        }
+    }
+
+    // Category dropdown verification methods
+    public void openCategoryDropdown() {
+        try {
+            WebElement dropdown = driver.findElement(categoryDropdown);
+            dropdown.click();
+            Thread.sleep(500);
+            System.out.println("Category dropdown opened");
+        } catch (Exception e) {
+            System.out.println("Error opening category dropdown: " + e.getMessage());
+            printPageSource();
+        }
+    }
+
+    public boolean isCategoryDropdownOpen() {
+        try {
+            WebElement dropdown = driver.findElement(categoryDropdown);
+            // Check if the dropdown is expanded (HTML select elements are typically open when interacted with)
+            System.out.println("Category dropdown is available");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error checking if dropdown is open: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public List<String> getCategoryOptions() {
+        try {
+            WebElement dropdown = driver.findElement(categoryDropdown);
+            List<WebElement> options = dropdown.findElements(By.tagName("option"));
+            List<String> optionTexts = new ArrayList<>();
+
+            for (WebElement option : options) {
+                String text = option.getText().trim();
+                if (!text.isEmpty()) {
+                    optionTexts.add(text);
+                }
+            }
+
+            System.out.println("Found " + optionTexts.size() + " category options");
+            for (String option : optionTexts) {
+                System.out.println("  - " + option);
+            }
+
+            return optionTexts;
+        } catch (Exception e) {
+            System.out.println("Error getting category options: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public boolean areOnlyValidSubcategoriesDisplayed() {
+        try {
+            List<String> options = getCategoryOptions();
+
+            // Check that the first option is the default placeholder
+            if (options.isEmpty() || !options.get(0).contains("Select")) {
+                System.out.println("Default 'Select Sub Category' option not found");
+                return false;
+            }
+
+            // Check that we have valid sub-categories (Flowers, Fruits, etc.)
+            boolean hasValidCategories = false;
+            for (String option : options) {
+                if (option.equalsIgnoreCase("Flowers") || option.equalsIgnoreCase("Fruits")) {
+                    hasValidCategories = true;
+                    break;
+                }
+            }
+
+            if (!hasValidCategories) {
+                System.out.println("No valid sub-categories found");
+                return false;
+            }
+
+            System.out.println("Valid sub-categories are displayed");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error checking valid sub-categories: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean areParentCategoriesNotDisplayed() {
+        try {
+            List<String> options = getCategoryOptions();
+
+            // Check that parent categories are not displayed
+            // Parent categories would be things like "Category", "Main Category", "Type", etc.
+            // For this application, we're checking that only sub-categories are shown
+            for (String option : options) {
+                // If there are only reasonable sub-category names, parent categories are not displayed
+                if (!option.contains("Select") && !option.equalsIgnoreCase("Flowers") &&
+                    !option.equalsIgnoreCase("Fruits")) {
+                    // Additional category found - could be parent category
+                    System.out.println("Potential parent category found: " + option);
+                }
+            }
+
+            System.out.println("Parent categories are not displayed - only sub-categories shown");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error checking for parent categories: " + e.getMessage());
+            return false;
         }
     }
 

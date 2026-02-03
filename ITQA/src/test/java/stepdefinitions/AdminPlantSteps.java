@@ -320,4 +320,32 @@ public class AdminPlantSteps {
         addPlantPage.clickSaveButton();
         System.out.println("Save button clicked");
     }
+
+    // Category dropdown verification steps
+    @When("admin user opens category dropdown")
+    public void admin_user_opens_category_dropdown() {
+        addPlantPage.openCategoryDropdown();
+        System.out.println("Category dropdown opened by admin");
+    }
+
+    @Then("category dropdown should be opened")
+    public void category_dropdown_should_be_opened() {
+        Assert.assertTrue(addPlantPage.isCategoryDropdownOpen(),
+            "Category dropdown is not open");
+        System.out.println("Category dropdown is opened");
+    }
+
+    @Then("only valid sub-categories should be displayed")
+    public void only_valid_sub_categories_should_be_displayed() {
+        Assert.assertTrue(addPlantPage.areOnlyValidSubcategoriesDisplayed(),
+            "Valid sub-categories are not displayed");
+        System.out.println("Only valid sub-categories are displayed");
+    }
+
+    @Then("parent categories should not be displayed")
+    public void parent_categories_should_not_be_displayed() {
+        Assert.assertTrue(addPlantPage.areParentCategoriesNotDisplayed(),
+            "Parent categories are displayed");
+        System.out.println("Parent categories are not displayed");
+    }
 }
