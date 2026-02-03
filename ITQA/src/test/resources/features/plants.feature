@@ -123,3 +123,16 @@ Feature: Admin User Plant Management
     Then user should be redirected to "/ui/plants" page
     And no data from Add Plant form should be saved
     And Plants page should be displayed
+
+  Scenario: Verify successful addition of a new plant to the plant list by filling the Add Plant form accurately
+    Given admin user is logged in successfully
+    And admin user is on the Plants page "/ui/plants"
+    When admin user clicks on Add a Plant button
+    And admin user enters plant name "Sunflower"
+    And admin user enters price "25"
+    And admin user enters quantity "20"
+    And admin user selects category "Flowers"
+    And admin user clicks Save button
+    Then user should be redirected to "/ui/plants" page
+    And Plants page should be displayed
+

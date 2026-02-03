@@ -3,13 +3,17 @@ package stepdefinitions;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
 import pages.AddPlantPage;
 import pages.LoginPage;
 import pages.PlantsPage;
 import utils.DriverManager;
+
+import java.util.List;
 
 public class AdminPlantSteps {
     private WebDriver driver;
@@ -374,5 +378,148 @@ public class AdminPlantSteps {
         Assert.assertFalse(currentUrl.contains("/plants/add"),
             "User is still on the add plant page - form data may have been saved");
         System.out.println("Form data was not saved - user is no longer on add plant page");
+    }
+
+    // Success message and plant addition steps
+    @Then("success message {string} should be displayed")
+    public void success_message_should_be_displayed(String expectedMessage) {
+        try {
+            Thread.sleep(2000);  // Increased wait time for success message
+
+            // Print page source for debugging
+            System.out.println("Looking for success message: " + expectedMessage);
+
+            // Method 1: Check for common success message containers
+            List<WebElement> successMessages = driver.findElements(
+                By.xpath("//*[contains(@class, 'alert-success') or contains(@class, 'alert') or contains(@class, 'success') or contains(@class, 'toast')]")
+            );
+
+            boolean messageFound = false;
+            if (!successMessages.isEmpty()) {
+                for (WebElement msg : successMessages) {
+                    if (msg.isDisplayed() && msg.getText().contains(expectedMessage)) {
+                        messageFound = true;
+                        System.out.println("Success message found (Method 1): " + msg.getText());
+                        break;
+                    }
+                }
+            }
+
+            // Method 2: Check for any element containing the exact message text
+            if (!messageFound) {
+                List<WebElement> messageElements = driver.findElements(
+                    By.xpath("//*[contains(text(), '" + expectedMessage + "')]")
+                );
+                if (!messageElements.isEmpty()) {
+                    for (WebElement elem : messageElements) {
+                        if (elem.isDisplayed()) {
+                            messageFound = true;
+                            System.out.println("Success message found (Method 2): " + elem.getText());
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Method 3: Check for div/span elements with the message text
+            if (!messageFound) {
+                try {
+                    WebElement messageDiv = driver.findElement(
+                        By.xpath("//div[contains(text(), '" + expectedMessage + "')] | //span[contains(text(), '" + expectedMessage + "')] | //h4[contains(text(), '" + expectedMessage + "')] | //p[contains(text(), '" + expectedMessage + "')]")
+                    );
+                    if (messageDiv.isDisplayed()) {
+                        messageFound = true;
+                        System.out.println("Success message found (Method 3): " + messageDiv.getText());
+                    }
+                } catch (Exception e) {
+                    System.out.println("Method 3 search failed: " + e.getMessage());
+                }
+            }
+
+            Assert.assertTrue(messageFound,
+                "Success message '" + expectedMessage + "' was not displayed. Please check page source.");
+            System.out.println("Success message displayed: " + expectedMessage);
+        } catch (Exception e) {
+            System.out.println("Error checking success message: " + e.getMessage());
+            // Print page source for debugging
+            try {
+                System.out.println("===== PAGE SOURCE FOR DEBUGGING =====");
+                System.out.println(driver.getPageSource());
+                System.out.println("===== END PAGE SOURCE =====");
+            } catch (Exception e2) {
+                System.out.println("Could not capture page source");
+            }
+            throw new RuntimeException("Failed to verify success message", e);
+        }
+    }
+
+    @Then("newly added plant {string} should be visible in the plants list")
+    public void newly_added_plant_should_be_visible_in_the_plants_list(String plantName) {
+        try {
+            Thread.sleep(2000);  // Increased wait time for page to fully load
+            System.out.println("Looking for newly added plant: " + plantName);
+
+            // Method 1: Check if the plant name appears anywhere on the page
+            List<WebElement> plantElements = driver.findElements(
+                By.xpath("//*[contains(text(), '" + plantName + "')]")
+            );
+
+            boolean plantFound = false;
+            if (!plantElements.isEmpty()) {
+                for (WebElement elem : plantElements) {
+                    if (elem.isDisplayed()) {
+                        plantFound = true;
+                        System.out.println("Plant found (Method 1): " + elem.getText());
+                        break;
+                    }
+                }
+            }
+
+            // Method 2: Check in table rows
+            if (!plantFound) {
+                try {
+                    List<WebElement> tableRows = driver.findElements(
+                        By.xpath("//table//tr[contains(., '" + plantName + "')]")
+                    );
+                    if (!tableRows.isEmpty()) {
+                        plantFound = true;
+                        System.out.println("Plant found in table (Method 2)");
+                    }
+                } catch (Exception e) {
+                    System.out.println("Method 2 search failed: " + e.getMessage());
+                }
+            }
+
+            // Method 3: Check in list items
+            if (!plantFound) {
+                try {
+                    List<WebElement> listItems = driver.findElements(
+                        By.xpath("//li[contains(text(), '" + plantName + "')] | //div[contains(@class, 'plant') and contains(text(), '" + plantName + "')]")
+                    );
+                    if (!listItems.isEmpty()) {
+                        plantFound = true;
+                        System.out.println("Plant found in list (Method 3)");
+                    }
+                } catch (Exception e) {
+                    System.out.println("Method 3 search failed: " + e.getMessage());
+                }
+            }
+
+            Assert.assertTrue(plantFound,
+                "Newly added plant '" + plantName + "' is not visible in the plants list");
+
+            System.out.println("Newly added plant '" + plantName + "' is visible in the plants list");
+        } catch (Exception e) {
+            System.out.println("Error checking newly added plant: " + e.getMessage());
+            // Print page source for debugging
+            try {
+                System.out.println("===== PAGE SOURCE FOR DEBUGGING =====");
+                System.out.println(driver.getPageSource());
+                System.out.println("===== END PAGE SOURCE =====");
+            } catch (Exception e2) {
+                System.out.println("Could not capture page source");
+            }
+            throw new RuntimeException("Failed to verify newly added plant visibility", e);
+        }
     }
 }
