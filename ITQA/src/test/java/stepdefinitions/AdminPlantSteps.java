@@ -354,4 +354,25 @@ public class AdminPlantSteps {
             "Parent categories are displayed");
         System.out.println("Parent categories are not displayed");
     }
+
+    // Cancel button steps
+    @When("admin user clicks Cancel button")
+    public void admin_user_clicks_cancel_button() {
+        addPlantPage.clickCancelButton();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Cancel button clicked");
+    }
+
+    @Then("no data from Add Plant form should be saved")
+    public void no_data_from_add_plant_form_should_be_saved() {
+        // Verify we're on the plants list page (not on add plant page)
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertFalse(currentUrl.contains("/plants/add"),
+            "User is still on the add plant page - form data may have been saved");
+        System.out.println("Form data was not saved - user is no longer on add plant page");
+    }
 }

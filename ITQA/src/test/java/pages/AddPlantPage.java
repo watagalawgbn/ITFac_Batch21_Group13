@@ -205,6 +205,17 @@ public class AddPlantPage {
         }
     }
 
+    public void clickCancelButton() {
+        try {
+            WebElement button = driver.findElement(cancelButton);
+            button.click();
+            System.out.println("Cancel button clicked");
+        } catch (Exception e) {
+            System.out.println("Error clicking cancel button: " + e.getMessage());
+            printPageSource();
+        }
+    }
+
     // Methods for entering form data
     public void enterPlantName(String plantName) {
         try {

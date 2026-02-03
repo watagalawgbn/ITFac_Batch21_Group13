@@ -112,3 +112,14 @@ Feature: Admin User Plant Management
     And plant should not be saved
     And user should remain on the Add Plant page "/ui/plants/add"
 
+  Scenario: Verify cancel button navigation functionality in Add plant form
+    Given admin user is logged in successfully
+    And admin user is on the Add Plant page "/ui/plants/add"
+    When admin user enters plant name "Test Plant"
+    And admin user enters price "50"
+    And admin user enters quantity "10"
+    And admin user selects category "Flowers"
+    And admin user clicks Cancel button
+    Then user should be redirected to "/ui/plants" page
+    And no data from Add Plant form should be saved
+    And Plants page should be displayed
