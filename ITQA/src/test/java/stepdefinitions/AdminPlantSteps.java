@@ -170,4 +170,62 @@ public class AdminPlantSteps {
         Assert.assertTrue(addPlantPage.isAddPlantFormDisplayed(), "Add Plant form is not displayed");
         System.out.println("Add Plant form is displayed successfully");
     }
+
+    // Verify default values of Add Plant form fields
+    @Then("all text fields should be empty by default")
+    public void all_text_fields_should_be_empty_by_default() {
+        Assert.assertTrue(addPlantPage.isPlantNameFieldEmpty(), "Plant Name field is not empty");
+        Assert.assertTrue(addPlantPage.isPriceFieldEmpty(), "Price field is not empty");
+        Assert.assertTrue(addPlantPage.isQuantityFieldEmpty(), "Quantity field is not empty");
+        System.out.println("All text fields are empty by default");
+    }
+
+    @Then("category dropdown should display default value {string}")
+    public void category_dropdown_should_display_default_value(String expectedDefault) {
+        String actualDefault = addPlantPage.getCategoryDropdownDefaultText();
+        Assert.assertTrue(actualDefault.contains(expectedDefault.replace("\"", "")),
+            "Category dropdown default value is not correct. Expected: " + expectedDefault + ", Actual: " + actualDefault);
+        System.out.println("Category dropdown displays default value: " + actualDefault);
+    }
+
+    @Then("no pre-filled data should be visible in the form")
+    public void no_pre_filled_data_should_be_visible_in_the_form() {
+        Assert.assertTrue(addPlantPage.isPlantNameFieldEmpty(), "Plant Name field has pre-filled data");
+        Assert.assertTrue(addPlantPage.isPriceFieldEmpty(), "Price field has pre-filled data");
+        Assert.assertTrue(addPlantPage.isQuantityFieldEmpty(), "Quantity field has pre-filled data");
+        Assert.assertTrue(addPlantPage.isCategoryDropdownDefaultValue(), "Category dropdown is not set to default");
+        System.out.println("No pre-filled data is visible in the form");
+    }
+
+    // Verify visibility of Save and Cancel buttons
+    @Then("Save button should be visible")
+    public void save_button_should_be_visible() {
+        Assert.assertTrue(addPlantPage.isSaveButtonVisible(), "Save button is not visible");
+        System.out.println("Save button is visible");
+    }
+
+    @Then("Cancel button should be visible")
+    public void cancel_button_should_be_visible() {
+        Assert.assertTrue(addPlantPage.isCancelButtonVisible(), "Cancel button is not visible");
+        System.out.println("Cancel button is visible");
+    }
+
+    @Then("Save button should be enabled for interaction")
+    public void save_button_should_be_enabled_for_interaction() {
+        Assert.assertTrue(addPlantPage.isSaveButtonEnabled(), "Save button is not enabled");
+        System.out.println("Save button is enabled for interaction");
+    }
+
+    @Then("Cancel button should be enabled for interaction")
+    public void cancel_button_should_be_enabled_for_interaction() {
+        Assert.assertTrue(addPlantPage.isCancelButtonEnabled(), "Cancel button is not enabled");
+        System.out.println("Cancel button is enabled for interaction");
+    }
+
+    @Then("both Save and Cancel buttons should be enabled for interaction")
+    public void both_save_and_cancel_buttons_should_be_enabled_for_interaction() {
+        Assert.assertTrue(addPlantPage.isSaveButtonEnabled(), "Save button is not enabled");
+        Assert.assertTrue(addPlantPage.isCancelButtonEnabled(), "Cancel button is not enabled");
+        System.out.println("Both Save and Cancel buttons are enabled for interaction");
+    }
 }
