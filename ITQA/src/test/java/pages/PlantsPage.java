@@ -11,6 +11,10 @@ public class PlantsPage {
     private By addPlantButton = By.xpath("//button[contains(text(), 'Add a Plant')] | //a[contains(text(), 'Add a Plant')] | //button[contains(text(), 'Add Plant')]");
     private By pageHeading = By.xpath("//h1[contains(text(), 'Plants')] | //h2[contains(text(), 'Plants')]");
     private By plantsPageTitle = By.tagName("h1");
+    private By actionsColumn = By.xpath("//th[contains(text(), 'Actions')] | //th[contains(., 'Action')]");
+    private By editButton = By.xpath("//a[contains(@href, 'edit')] | //button[contains(@id, 'edit')] | //i[@class[contains(., 'edit')]] | //*[contains(text(), 'Edit')]");
+    private By deleteButton = By.xpath("//a[contains(@href, 'delete')] | //button[contains(@id, 'delete')] | //i[@class[contains(., 'delete')]] | //*[contains(text(), 'Delete')]");
+    private By tableRows = By.xpath("//table//tbody//tr");
 
     public PlantsPage(WebDriver driver) {
         this.driver = driver;
@@ -71,6 +75,126 @@ public class PlantsPage {
             // Check for form elements that would be present on the Add Plant form
             return driver.findElements(By.xpath("//form | //input[@name='plantName'] | //input[@placeholder]")).size() > 0;
         } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isActionsColumnVisible() {
+        try {
+            WebElement column = driver.findElement(actionsColumn);
+            return column.isDisplayed();
+        } catch (Exception e) {
+            System.out.println("Actions column not found: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean areEditButtonsVisibleForAllPlants() {
+        try {
+            // First check if there are table rows with plants
+            java.util.List<WebElement> rows = driver.findElements(tableRows);
+            if (rows.isEmpty()) {
+                System.out.println("No plant records found in the table");
+                return false;
+            }
+
+            // Try multiple approaches to find edit buttons
+            // Approach 1: Look for any element in actions cell that might be an edit button
+            java.util.List<WebElement> editButtons = driver.findElements(
+                By.xpath("//table//tbody//tr//td[last()]//a | //table//tbody//tr//td[last()]//button | //table//tbody//tr//td[last()]//i | //table//tbody//tr//*[contains(@class, 'edit')] | //table//tbody//tr//*[contains(@class, 'fa-pencil')] | //table//tbody//tr//*[contains(@href, 'edit')]")
+            );
+
+            if (editButtons.isEmpty()) {
+                // Approach 2: Look for any clickable element in the last column of each row
+                editButtons = driver.findElements(
+                    By.xpath("//table//tbody//tr//td//a[@href] | //table//tbody//tr//td//button")
+                );
+
+                // Filter to find edit-related buttons
+                int editCount = 0;
+                for (WebElement button : editButtons) {
+                    String text = button.getText().toLowerCase();
+                    String href = button.getAttribute("href");
+                    String id = button.getAttribute("id");
+                    String classes = button.getAttribute("class");
+
+                    if ((href != null && href.contains("edit")) ||
+                        (id != null && id.contains("edit")) ||
+                        (classes != null && classes.contains("edit")) ||
+                        text.contains("edit")) {
+                        editCount++;
+                    }
+                }
+
+                if (editCount > 0) {
+                    System.out.println("Found " + editCount + " edit buttons for " + rows.size() + " plants");
+                    return true;
+                }
+
+                System.out.println("No edit buttons found in the plants table");
+                return false;
+            }
+
+            System.out.println("Found " + editButtons.size() + " edit buttons for " + rows.size() + " plants");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error checking edit buttons: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean areDeleteButtonsVisibleForAllPlants() {
+        try {
+            // First check if there are table rows with plants
+            java.util.List<WebElement> rows = driver.findElements(tableRows);
+            if (rows.isEmpty()) {
+                System.out.println("No plant records found in the table");
+                return false;
+            }
+
+            // Try multiple approaches to find delete buttons
+            // Approach 1: Look for any element in actions cell that might be a delete button
+            java.util.List<WebElement> deleteButtons = driver.findElements(
+                By.xpath("//table//tbody//tr//td[last()]//a | //table//tbody//tr//td[last()]//button | //table//tbody//tr//td[last()]//i | //table//tbody//tr//*[contains(@class, 'delete')] | //table//tbody//tr//*[contains(@class, 'fa-trash')] | //table//tbody//tr//*[contains(@href, 'delete')]")
+            );
+
+            if (deleteButtons.isEmpty()) {
+                // Approach 2: Look for any clickable element in the last column of each row
+                deleteButtons = driver.findElements(
+                    By.xpath("//table//tbody//tr//td//a[@href] | //table//tbody//tr//td//button")
+                );
+
+                // Filter to find delete-related buttons
+                int deleteCount = 0;
+                for (WebElement button : deleteButtons) {
+                    String text = button.getText().toLowerCase();
+                    String href = button.getAttribute("href");
+                    String id = button.getAttribute("id");
+                    String classes = button.getAttribute("class");
+
+                    if ((href != null && href.contains("delete")) ||
+                        (id != null && id.contains("delete")) ||
+                        (classes != null && classes.contains("delete")) ||
+                        text.contains("delete")) {
+                        deleteCount++;
+                    }
+                }
+
+                if (deleteCount > 0) {
+                    System.out.println("Found " + deleteCount + " delete buttons for " + rows.size() + " plants");
+                    return true;
+                }
+
+                System.out.println("No delete buttons found in the plants table");
+                return false;
+            }
+
+            System.out.println("Found " + deleteButtons.size() + " delete buttons for " + rows.size() + " plants");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error checking delete buttons: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }

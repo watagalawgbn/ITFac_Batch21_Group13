@@ -136,3 +136,9 @@ Feature: Admin User Plant Management
     Then user should be redirected to "/ui/plants" page
     And Plants page should be displayed
 
+  Scenario: Verify visibility of Edit and Delete actions for admin
+    Given admin user is logged in successfully
+    And admin user is on the Plants page "/ui/plants"
+    Then Actions column should be visible in the plants list
+    And Edit icon button should be visible for each plant
+    And Delete icon button should be visible for each plant

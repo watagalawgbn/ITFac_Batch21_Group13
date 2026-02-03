@@ -522,4 +522,26 @@ public class AdminPlantSteps {
             throw new RuntimeException("Failed to verify newly added plant visibility", e);
         }
     }
+
+    // Edit and Delete actions visibility steps
+    @Then("Actions column should be visible in the plants list")
+    public void actions_column_should_be_visible_in_the_plants_list() {
+        Assert.assertTrue(plantsPage.isActionsColumnVisible(),
+            "Actions column is not visible in the plants list");
+        System.out.println("Actions column is visible in the plants list");
+    }
+
+    @Then("Edit icon button should be visible for each plant")
+    public void edit_icon_button_should_be_visible_for_each_plant() {
+        Assert.assertTrue(plantsPage.areEditButtonsVisibleForAllPlants(),
+            "Edit icon buttons are not visible for plants");
+        System.out.println("Edit icon buttons are visible for each plant");
+    }
+
+    @Then("Delete icon button should be visible for each plant")
+    public void delete_icon_button_should_be_visible_for_each_plant() {
+        Assert.assertTrue(plantsPage.areDeleteButtonsVisibleForAllPlants(),
+            "Delete icon buttons are not visible for plants");
+        System.out.println("Delete icon buttons are visible for each plant");
+    }
 }
