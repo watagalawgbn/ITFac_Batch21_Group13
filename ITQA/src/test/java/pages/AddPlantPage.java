@@ -204,6 +204,64 @@ public class AddPlantPage {
         }
     }
 
+    // Methods for entering form data
+    public void enterPlantName(String plantName) {
+        try {
+            WebElement field = driver.findElement(plantNameInput);
+            field.clear();
+            field.sendKeys(plantName);
+            System.out.println("Plant name entered: " + plantName);
+        } catch (Exception e) {
+            System.out.println("Error entering plant name: " + e.getMessage());
+            printPageSource();
+        }
+    }
+
+    public void enterPrice(String price) {
+        try {
+            WebElement field = driver.findElement(priceInput);
+            field.clear();
+            field.sendKeys(price);
+            System.out.println("Price entered: " + price);
+        } catch (Exception e) {
+            System.out.println("Error entering price: " + e.getMessage());
+            printPageSource();
+        }
+    }
+
+    public void enterQuantity(String quantity) {
+        try {
+            WebElement field = driver.findElement(quantityInput);
+            field.clear();
+            field.sendKeys(quantity);
+            System.out.println("Quantity entered: " + quantity);
+        } catch (Exception e) {
+            System.out.println("Error entering quantity: " + e.getMessage());
+            printPageSource();
+        }
+    }
+
+    public void selectCategory(String categoryName) {
+        try {
+            WebElement dropdown = driver.findElement(categoryDropdown);
+
+            // Find the option with the matching text
+            List<WebElement> options = dropdown.findElements(By.tagName("option"));
+            for (WebElement option : options) {
+                if (option.getText().trim().equalsIgnoreCase(categoryName)) {
+                    option.click();
+                    System.out.println("Category selected: " + categoryName);
+                    return;
+                }
+            }
+
+            System.out.println("Category '" + categoryName + "' not found in dropdown");
+        } catch (Exception e) {
+            System.out.println("Error selecting category: " + e.getMessage());
+            printPageSource();
+        }
+    }
+
     public boolean areValidationMessagesDisplayed() {
         try {
             // Wait a moment for validation messages to appear

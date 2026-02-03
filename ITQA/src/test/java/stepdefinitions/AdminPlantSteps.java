@@ -289,4 +289,35 @@ public class AdminPlantSteps {
             throw new RuntimeException("Failed to navigate to Add Plant page", e);
         }
     }
+
+    // Plant name length validation steps
+    @When("admin user enters plant name with {int} characters {string}")
+    public void admin_user_enters_plant_name_with_characters(int characterCount, String plantName) {
+        addPlantPage.enterPlantName(plantName);
+        System.out.println("Plant name with " + characterCount + " characters entered: " + plantName);
+    }
+
+    @When("admin user enters price {string}")
+    public void admin_user_enters_price(String price) {
+        addPlantPage.enterPrice(price);
+        System.out.println("Price entered: " + price);
+    }
+
+    @When("admin user enters quantity {string}")
+    public void admin_user_enters_quantity(String quantity) {
+        addPlantPage.enterQuantity(quantity);
+        System.out.println("Quantity entered: " + quantity);
+    }
+
+    @When("admin user selects category {string}")
+    public void admin_user_selects_category(String categoryName) {
+        addPlantPage.selectCategory(categoryName);
+        System.out.println("Category selected: " + categoryName);
+    }
+
+    @When("admin user clicks Save button")
+    public void admin_user_clicks_save_button() {
+        addPlantPage.clickSaveButton();
+        System.out.println("Save button clicked");
+    }
 }

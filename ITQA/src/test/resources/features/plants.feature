@@ -55,3 +55,28 @@ Feature: Admin User Plant Management
     And validation message "Quantity is required" should be displayed
     And plant should not be saved
     And user should remain on the Add Plant page "/ui/plants/add"
+
+  Scenario: Verify minimum length validation for plant name in Add Plant form
+    Given admin user is logged in successfully
+    And admin user is on the Add Plant page "/ui/plants/add"
+    When admin user enters plant name with 2 characters "AB"
+    And admin user enters price "100"
+    And admin user enters quantity "5"
+    And admin user selects category "Flowers"
+    And admin user clicks Save button
+    Then validation message "Plant name must be between 3 and 25 characters" should be displayed
+    And plant should not be saved
+    And user should remain on the Add Plant page "/ui/plants/add"
+
+  Scenario: Verify maximum length validation for plant name in Add Plant form
+    Given admin user is logged in successfully
+    And admin user is on the Add Plant page "/ui/plants/add"
+    When admin user enters plant name with 26 characters "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    And admin user enters price "100"
+    And admin user enters quantity "5"
+    And admin user selects category "Flowers"
+    And admin user clicks Save button
+    Then validation message "Plant name must be between 3 and 25 characters" should be displayed
+    And plant should not be saved
+    And user should remain on the Add Plant page "/ui/plants/add"
+
