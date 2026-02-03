@@ -87,3 +87,28 @@ Feature: Admin User Plant Management
     Then category dropdown should be opened
     And only valid sub-categories should be displayed
     And parent categories should not be displayed
+
+  Scenario: Verify that negative price values are not allowed in Add plant form
+    Given admin user is logged in successfully
+    And admin user is on the Add Plant page "/ui/plants/add"
+    When admin user enters plant name "Rose Plant"
+    And admin user enters price "-10"
+    And admin user enters quantity "5"
+    And admin user selects category "Flowers"
+    And admin user clicks Save button
+    Then validation message "Price must be greater than 0" should be displayed
+    And plant should not be saved
+    And user should remain on the Add Plant page "/ui/plants/add"
+
+  Scenario: Verify that zero price is not allowed in Add plant form
+    Given admin user is logged in successfully
+    And admin user is on the Add Plant page "/ui/plants/add"
+    When admin user enters plant name "Lily Plant"
+    And admin user enters price "0"
+    And admin user enters quantity "5"
+    And admin user selects category "Flowers"
+    And admin user clicks Save button
+    Then validation message "Price must be greater than 0" should be displayed
+    And plant should not be saved
+    And user should remain on the Add Plant page "/ui/plants/add"
+

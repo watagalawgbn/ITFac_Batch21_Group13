@@ -297,6 +297,12 @@ public class AdminPlantSteps {
         System.out.println("Plant name with " + characterCount + " characters entered: " + plantName);
     }
 
+    @When("admin user enters plant name {string}")
+    public void admin_user_enters_plant_name(String plantName) {
+        addPlantPage.enterPlantName(plantName);
+        System.out.println("Plant name entered: " + plantName);
+    }
+
     @When("admin user enters price {string}")
     public void admin_user_enters_price(String price) {
         addPlantPage.enterPrice(price);
