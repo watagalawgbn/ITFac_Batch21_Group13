@@ -44,3 +44,14 @@ Feature: Admin User Plant Management
     And Cancel button should be visible
     And both Save and Cancel buttons should be enabled for interaction
 
+  Scenario: Verify mandatory field validations in Add Plant form
+    Given admin user is logged in successfully
+    And admin user is on the Add Plant page "/ui/plants/add"
+    When admin user clicks Save button without entering any data
+    Then validation messages should appear for mandatory fields
+    And validation message "Plant name is required" should be displayed
+    And validation message "Category is required" should be displayed
+    And validation message "Price is required" should be displayed
+    And validation message "Quantity is required" should be displayed
+    And plant should not be saved
+    And user should remain on the Add Plant page "/ui/plants/add"

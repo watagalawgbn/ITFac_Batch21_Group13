@@ -191,4 +191,103 @@ public class AddPlantPage {
             return false;
         }
     }
+
+    // Methods for form submission and validation
+    public void clickSaveButton() {
+        try {
+            WebElement button = driver.findElement(saveButton);
+            button.click();
+            System.out.println("Save button clicked");
+        } catch (Exception e) {
+            System.out.println("Error clicking save button: " + e.getMessage());
+            printPageSource();
+        }
+    }
+
+    public boolean areValidationMessagesDisplayed() {
+        try {
+            // Wait a moment for validation messages to appear
+            Thread.sleep(1000);
+
+            // Check for validation messages in div.text-danger elements
+            List<WebElement> errorMessages = driver.findElements(By.xpath("//div[contains(@class, 'text-danger')]"));
+
+            System.out.println("Found " + errorMessages.size() + " validation message elements");
+
+            if (!errorMessages.isEmpty()) {
+                // Print the validation messages found
+                for (WebElement msg : errorMessages) {
+                    if (msg.isDisplayed()) {
+                        System.out.println("  - " + msg.getText());
+                    }
+                }
+                System.out.println("Validation messages are displayed");
+                return true;
+            }
+
+            // Print page source for debugging
+            printPageSource();
+            return false;
+        } catch (Exception e) {
+            System.out.println("Error checking validation messages: " + e.getMessage());
+            printPageSource();
+            return false;
+        }
+    }
+
+    public boolean isValidationMessageDisplayed(String fieldName) {
+        try {
+            // Look for validation messages containing the field name
+            String xpath = "//*[contains(text(), '" + fieldName + "')]";
+            WebElement message = driver.findElement(By.xpath(xpath));
+
+            if (message.isDisplayed()) {
+                System.out.println("Validation message for '" + fieldName + "' is displayed: " + message.getText());
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Validation message for '" + fieldName + "' not found: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public String getValidationMessageText(String fieldName) {
+        try {
+            // Look for validation messages containing the field name
+            List<WebElement> messages = driver.findElements(By.xpath("//*[contains(text(), '" + fieldName + "')]"));
+
+            if (!messages.isEmpty()) {
+                return messages.get(0).getText();
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting validation message text: " + e.getMessage());
+        }
+
+        return "";
+    }
+
+    public boolean hasValidationMessageForField(String expectedMessage) {
+        try {
+            Thread.sleep(500);
+
+            // Check for validation messages in div.text-danger elements containing the expected message
+            List<WebElement> allMessages = driver.findElements(By.xpath("//div[contains(@class, 'text-danger')]"));
+
+            if (!allMessages.isEmpty()) {
+                for (WebElement msg : allMessages) {
+                    if (msg.isDisplayed() && msg.getText().contains(expectedMessage)) {
+                        System.out.println("Found validation message: " + msg.getText());
+                        return true;
+                    }
+                }
+            }
+            System.out.println("Validation message '" + expectedMessage + "' not found");
+            printPageSource();
+            return false;
+        } catch (Exception e) {
+            System.out.println("Error checking validation message: " + e.getMessage());
+            return false;
+        }
+    }
 }

@@ -228,4 +228,65 @@ public class AdminPlantSteps {
         Assert.assertTrue(addPlantPage.isCancelButtonEnabled(), "Cancel button is not enabled");
         System.out.println("Both Save and Cancel buttons are enabled for interaction");
     }
+
+    // Verify mandatory field validations
+    @When("admin user clicks Save button without entering any data")
+    public void admin_user_clicks_save_button_without_entering_any_data() {
+        addPlantPage.clickSaveButton();
+        System.out.println("Save button clicked without entering any data");
+    }
+
+    @Then("validation messages should appear for mandatory fields")
+    public void validation_messages_should_appear_for_mandatory_fields() {
+        Assert.assertTrue(addPlantPage.areValidationMessagesDisplayed(),
+            "Validation messages are not displayed for mandatory fields");
+        System.out.println("Validation messages appear for mandatory fields");
+    }
+
+    @Then("validation message {string} should be displayed")
+    public void validation_message_should_be_displayed(String expectedMessage) {
+        Assert.assertTrue(addPlantPage.hasValidationMessageForField(expectedMessage),
+            "Validation message '" + expectedMessage + "' is not displayed");
+        System.out.println("Validation message displayed: " + expectedMessage);
+    }
+
+    @Then("plant should not be saved")
+    public void plant_should_not_be_saved() {
+        // Verify we're still on the add plant page (plant was not saved and redirected)
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertTrue(currentUrl.contains("/plants/add"),
+            "Plant was saved and user was redirected. Current URL: " + currentUrl);
+        System.out.println("Plant was not saved - user remains on add plant page");
+    }
+
+    @Then("user should remain on the Add Plant page {string}")
+    public void user_should_remain_on_the_add_plant_page(String expectedPath) {
+        String currentUrl = driver.getCurrentUrl();
+        Assert.assertTrue(currentUrl.contains(expectedPath.replace("/ui/", "")),
+            "User was not redirected to " + expectedPath + ". Current URL: " + currentUrl);
+        Assert.assertTrue(addPlantPage.isAddPlantFormDisplayed(), "Add Plant form is not displayed");
+        System.out.println("User remains on the Add Plant page: " + expectedPath);
+    }
+
+    @Given("admin user is on the Add Plant page {string}")
+    public void admin_user_is_on_the_add_plant_page(String path) {
+        try {
+            String url = driver.getCurrentUrl();
+            if (!url.contains("/plants/add")) {
+                // Navigate to the add plant page
+                driver.navigate().to("http://localhost:8080" + path);
+                System.out.println("Navigated to Add Plant page: " + path);
+            }
+
+            // Wait for the form to load
+            Thread.sleep(2000);
+
+            Assert.assertTrue(addPlantPage.isOnAddPlantPage(), "Not on Add Plant page");
+            Assert.assertTrue(addPlantPage.isAddPlantFormDisplayed(), "Add Plant form is not displayed");
+            System.out.println("Admin user is on the Add Plant page: " + path);
+        } catch (Exception e) {
+            System.out.println("Error navigating to Add Plant page: " + e.getMessage());
+            throw new RuntimeException("Failed to navigate to Add Plant page", e);
+        }
+    }
 }
