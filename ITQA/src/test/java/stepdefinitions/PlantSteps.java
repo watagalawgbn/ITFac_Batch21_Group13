@@ -676,4 +676,27 @@ public class PlantSteps {
 
         System.out.println("Normal user cannot add plants - restriction verified");
     }
+
+    @Then("Actions column should not be visible for normal user")
+    public void actions_column_should_not_be_visible_for_normal_user() {
+        Assert.assertFalse(plantsPage.isActionsColumnVisible(),
+            "Actions column is visible for normal user (should be hidden)");
+        System.out.println("Actions column is correctly hidden for normal user");
+    }
+
+    @Then("Edit icons should not be visible for normal user")
+    public void edit_icons_should_not_be_visible_for_normal_user() {
+        Assert.assertFalse(plantsPage.areEditButtonsVisibleForAllPlants(),
+            "Edit icons are visible for normal user (should be hidden)");
+        System.out.println("Edit icons are correctly hidden for normal user");
+    }
+
+    @Then("Delete icons should not be visible for normal user")
+    public void delete_icons_should_not_be_visible_for_normal_user() {
+        Assert.assertFalse(plantsPage.areDeleteButtonsVisibleForAllPlants(),
+            "Delete icons are visible for normal user (should be hidden)");
+        System.out.println("Delete icons are correctly hidden for normal user");
+    }
 }
+
+

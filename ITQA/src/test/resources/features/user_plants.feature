@@ -28,3 +28,11 @@ Feature: Normal User Plant Management
     And Add Plant button should not be visible for normal user
     And normal user cannot add plants
 
+  @ActionsColumnHidden
+  Scenario: Verify Action Column is hidden and the Edit and Delete action buttons are hidden for non-admin user
+    Given user is logged in successfully as a normal user
+    When user navigates to Plants page "/ui/plants"
+    Then Plants page should be displayed
+    And Actions column should not be visible for normal user
+    And Edit icons should not be visible for normal user
+    And Delete icons should not be visible for normal user
