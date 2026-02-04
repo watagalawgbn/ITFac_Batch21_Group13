@@ -7,3 +7,9 @@ Feature: User Plant API
     When user sends GET request to "/api/plants"
     Then user receives status code 200
     And user receives list of plants in response
+
+  Scenario: Verify unauthorized plant addition by normal user via API
+    Given user API base URL is set
+    And user token is available
+    When user sends POST request to add a plant
+    Then user receives status code 403

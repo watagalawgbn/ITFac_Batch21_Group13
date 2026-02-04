@@ -66,4 +66,31 @@ public class UserApiSteps {
 
         System.out.println("User received plant list. Total plants: " + plantCount);
     }
+
+    @When("user sends POST request to add a plant")
+    public void user_sends_post_request_to_add_a_plant() {
+
+        String requestBody = """
+    {
+      "id": 0,
+      "name": "Unauthorized_Plant",
+      "price": 50,
+      "quantity": 10,
+      "category": {
+        "id": %d,
+        "name": "Flowers",
+        "parent": null,
+        "subCategories": []
+      }
+    }
+    """.formatted(CATEGORY_ID);
+
+        response =
+                given()
+                        .header("Authorization", "Bearer " + userToken)
+                        .header("Content-Type", "application/json")
+                        .body(requestBody)
+                        .when()
+                        .post("/api/plants/category/" + CATEGORY_ID);
+    }
 }
