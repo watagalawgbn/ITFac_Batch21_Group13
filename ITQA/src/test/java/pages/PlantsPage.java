@@ -15,6 +15,8 @@ public class PlantsPage {
     private By editButton = By.xpath("//a[contains(@href, 'edit')] | //button[contains(@id, 'edit')] | //i[@class[contains(., 'edit')]] | //*[contains(text(), 'Edit')]");
     private By deleteButton = By.xpath("//a[contains(@href, 'delete')] | //button[contains(@id, 'delete')] | //i[@class[contains(., 'delete')]] | //*[contains(text(), 'Delete')]");
     private By tableRows = By.xpath("//table//tbody//tr");
+    private By quantityColumnCells = By.xpath("//table//tbody//tr//td[contains(@class,'quantity') or position()=4]");
+    private By lowBadge = By.xpath(".//*[contains(@class,'badge') and contains(text(),'Low')]");
 
     public PlantsPage(WebDriver driver) {
         this.driver = driver;
@@ -229,6 +231,64 @@ public class PlantsPage {
             System.out.println("Error checking plant list: " + e.getMessage());
             return false;
         }
+    }
+
+    public boolean hasAtLeastOneLowStockPlant(int threshold) {
+        java.util.List<WebElement> rows = driver.findElements(tableRows);
+
+        for (WebElement row : rows) {
+            WebElement quantityCell = row.findElement(
+                    By.xpath(".//td[contains(@class,'quantity') or position()=4]")
+            );
+
+            String quantityText = quantityCell.getText().trim();
+            int quantity = Integer.parseInt(quantityText.replaceAll("[^0-9]", ""));
+
+            if (quantity < threshold) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isLowBadgeDisplayedForLowStockPlants(int threshold) {
+        java.util.List<WebElement> rows = driver.findElements(tableRows);
+
+        for (WebElement row : rows) {
+            WebElement quantityCell = row.findElement(
+                    By.xpath(".//td[contains(@class,'quantity') or position()=4]")
+            );
+
+            String quantityText = quantityCell.getText().trim();
+            int quantity = Integer.parseInt(quantityText.replaceAll("[^0-9]", ""));
+
+            if (quantity < threshold) {
+                if (row.findElements(lowBadge).isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isLowBadgeHiddenForNonLowStockPlants(int threshold) {
+        java.util.List<WebElement> rows = driver.findElements(tableRows);
+
+        for (WebElement row : rows) {
+            WebElement quantityCell = row.findElement(
+                    By.xpath(".//td[contains(@class,'quantity') or position()=4]")
+            );
+
+            String quantityText = quantityCell.getText().trim();
+            int quantity = Integer.parseInt(quantityText.replaceAll("[^0-9]", ""));
+
+            if (quantity >= threshold) {
+                if (!row.findElements(lowBadge).isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
 

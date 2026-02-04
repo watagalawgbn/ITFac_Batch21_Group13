@@ -697,6 +697,33 @@ public class PlantSteps {
             "Delete icons are visible for normal user (should be hidden)");
         System.out.println("Delete icons are correctly hidden for normal user");
     }
+
+    @Then("at least one plant with quantity less than 5 should exist")
+    public void at_least_one_low_stock_plant_should_exist() {
+        Assert.assertTrue(
+                plantsPage.hasAtLeastOneLowStockPlant(5),
+                "No plant with quantity less than 5 exists"
+        );
+        System.out.println("At least one low stock plant exists");
+    }
+
+    @Then("Low badge should be displayed for plants with low stock")
+    public void low_badge_should_be_displayed_for_low_stock_plants() {
+        Assert.assertTrue(
+                plantsPage.isLowBadgeDisplayedForLowStockPlants(5),
+                "Low badge is not displayed for low stock plants"
+        );
+        System.out.println("Low badge is displayed for low stock plants");
+    }
+
+    @Then("Low badge should not be displayed for plants with sufficient stock")
+    public void low_badge_should_not_be_displayed_for_sufficient_stock_plants() {
+        Assert.assertTrue(
+                plantsPage.isLowBadgeHiddenForNonLowStockPlants(5),
+                "Low badge is incorrectly displayed for sufficient stock plants"
+        );
+        System.out.println("Low badge is hidden for sufficient stock plants");
+    }
 }
 
 

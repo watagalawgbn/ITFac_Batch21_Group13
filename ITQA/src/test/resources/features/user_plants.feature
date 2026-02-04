@@ -36,3 +36,15 @@ Feature: Normal User Plant Management
     And Actions column should not be visible for normal user
     And Edit icons should not be visible for normal user
     And Delete icons should not be visible for normal user
+
+  @LowStockBadge
+  Scenario: Verify Low badge display for low stock plants for normal user
+    Given user is logged in successfully as a normal user
+    When user navigates to Plants page "/ui/plants"
+    Then Plants page should be displayed
+    And at least one plant with quantity less than 5 should exist
+    And Low badge should be displayed for plants with low stock
+    And Low badge should not be displayed for plants with sufficient stock
+
+
+
