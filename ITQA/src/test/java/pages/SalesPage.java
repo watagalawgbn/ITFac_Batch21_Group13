@@ -21,6 +21,15 @@ public class SalesPage {
     private final By noSalesMessage = By.xpath("//*[text() = 'No sales found']");
     private final By sellPlantButton = By.xpath("//a[contains(text(), 'Sell Plant')]");
 
+    // pagination container
+    private final By pagination =
+            By.cssSelector("ul.pagination");
+
+    // page numbers except active one
+    private final By paginationPages =
+            By.cssSelector("ul.pagination li.page-item:not(.active):not(.disabled) a.page-link");
+
+
     public SalesPage(WebDriver driver){
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -87,4 +96,42 @@ public class SalesPage {
         }
         return getSalesCount() == beforeCount - 1;
     }
+
+
+    //-------------USER----------------------------
+    public boolean isPaginationVisible() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(pagination));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public List<String> getCurrentPageSaleIds() {
+        List<WebElement> rows = driver.findElements(salesRows);
+        return rows.stream()
+                .map(row -> row.getText())
+                .toList();
+    }
+
+    public void clickNextPage() {
+        List<WebElement> oldRows =
+                wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(salesRows));
+
+        List<WebElement> pages =
+                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(paginationPages));
+
+        if (pages.isEmpty()) {
+            throw new RuntimeException("No enabled pagination pages available");
+        }
+
+        wait.until(ExpectedConditions.elementToBeClickable(pages.get(0))).click();
+
+        wait.until(ExpectedConditions.stalenessOf(oldRows.get(0)));
+    }
+
+
+
+
 }

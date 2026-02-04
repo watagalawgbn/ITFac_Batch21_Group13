@@ -7,12 +7,17 @@ import pages.LoginPage;
 import pages.SalesPage;
 import utils.DriverFactory;
 
+import java.util.List;
+
 public class UserSalesSteps {
 
     private LoginPage loginPage;
     private DashboardPage dashboardPage;
     private SalesPage salesPage;
+    private List<String> firstPageSales;
 
+
+    //VIEW SALE LIST
     @Given("User is logged in")
     public void user_is_logged_in() {
         loginPage = new LoginPage(DriverFactory.getDriver());
@@ -34,5 +39,39 @@ public class UserSalesSteps {
 
         Assert.assertTrue(isVisible,
                 "Sales list or No Sales message is not visible to the user");
+    }
+
+    //CHECK FOR PAGINATION
+    @And("Pagination controls are visible")
+    public void pagination_controls_are_visible() {
+        Assert.assertTrue(
+                salesPage.isPaginationVisible(),
+                "Pagination controls are not visible"
+        );
+    }
+
+
+    @And("User clicks the next pagination button")
+    public void user_clicks_next_pagination_button() {
+
+        Assert.assertTrue(
+                salesPage.isPaginationVisible(),
+                "Pagination is not visible although more than 10 sales exist"
+        );
+
+        firstPageSales = salesPage.getCurrentPageSaleIds();
+        salesPage.clickNextPage();
+    }
+
+    @Then("Next set of sales records should be displayed")
+    public void next_set_of_sales_records_should_be_displayed() {
+
+        List<String> secondPageSales = salesPage.getCurrentPageSaleIds();
+
+        Assert.assertNotEquals(
+                firstPageSales,
+                secondPageSales,
+                "Pagination did not change the sales list"
+        );
     }
 }
