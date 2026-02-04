@@ -26,4 +26,11 @@ Feature: Admin sales management
     Then Sale should be created successfully
     And Admin should be redirected to the sales list page
 
+  Scenario: Admin can delete a sale successfully
+    Given Admin is logged in
+    When Admin navigates to the sales list page
+    And At least one sale record exists
+    And Admin clicks delete button of a sale
+    And Admin confirms the deletion
+    Then Sale should be deleted successfully
 

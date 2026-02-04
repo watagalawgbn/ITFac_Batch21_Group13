@@ -17,7 +17,7 @@ public class AdminSalesSteps {
     private DashboardPage dashboardPage;
     private SalesPage salesPage;
     private SellPlantPage sellPlantPage;
-
+    private int salesCountBeforeDelete;
 
     // LOGIN
     @Given("Admin is logged in")
@@ -99,4 +99,36 @@ public class AdminSalesSteps {
         Assert.assertTrue(salesPage.isSalesListDisplayed(),
                 "Admin was not redirected to sales list page");
     }
+
+    //DELETE
+    @And("At least one sale record exists")
+    public void at_least_one_sale_record_exists(){
+        Assert.assertTrue(
+                salesPage.getSalesCount() > 0,
+                "No sales available to delete"
+        );
+    }
+    @When("Admin clicks delete button of a sale")
+    public void admin_clicks_delete_button_of_a_sale(){
+        salesCountBeforeDelete = salesPage.getSalesCount();
+        salesPage.clickFirstDeleteButton();
+    }
+
+    @And("Admin confirms the deletion")
+    public void admin_confirms_the_deletion(){
+        salesPage.acceptDeleteAlert();
+    }
+
+    @Then("Sale should be deleted successfully")
+    public void sale_should_be_deleted_successfully() {
+
+        SalesPage salesPage = new SalesPage(DriverFactory.getDriver());
+
+        boolean isDeleted =
+                salesPage.isNoSalesMessageDisplayed()
+                        || salesPage.isSalesListDisplayed();
+
+        Assert.assertTrue(isDeleted, "Sale was not deleted successfully");
+    }
+
 }
