@@ -13,3 +13,10 @@ Feature: Admin Plant API
     And admin token is available
     When admin sends POST request to add a plant
     Then plant should be created successfully with status code 201
+
+  Scenario: Verify adding plant with duplicate name via API
+    Given admin API base URL is set
+    And admin token is available
+    When admin sends POST request to add a plant with duplicate name
+    Then API should return status code 400
+    And duplicate name validation message is returned

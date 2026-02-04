@@ -115,4 +115,49 @@ public class AdminApiSteps {
 
         System.out.println("Plant created successfully: " + returnedName);
     }
+
+    @When("admin sends POST request to add a plant with duplicate name")
+    public void admin_sends_post_request_to_add_plant_with_duplicate_name() {
+        // Use an existing plant name from the database
+        plantName = "Anthurium"; // or any plant already in DB
+
+        String requestBody = """
+    {
+      "id": 0,
+      "name": "%s",
+      "price": 50,
+      "quantity": 30,
+      "category": {
+        "id": %d,
+        "name": "Flowers",
+        "parent": null,
+        "subCategories": []
+      }
+    }
+    """.formatted(plantName, CATEGORY_ID);
+
+        response =
+                given()
+                        .header("Authorization", "Bearer " + adminToken)
+                        .header("Content-Type", "application/json")
+                        .body(requestBody)
+                        .when()
+                        .post("/api/plants/category/" + CATEGORY_ID);
+    }
+
+    @Then("API should return status code {int}")
+    public void api_should_return_status_code(Integer statusCode) {
+        assertEquals(response.getStatusCode(), statusCode.intValue(),
+                "Unexpected status code");
+    }
+
+    @Then("duplicate name validation message is returned")
+    public void duplicate_name_validation_message_is_returned() {
+        String message = response.jsonPath().getString("message");
+        assertNotNull(message, "Validation message is missing");
+        assertTrue(message.toLowerCase().contains("duplicate") || message.toLowerCase().contains("exists"),
+                "Expected duplicate validation message, got: " + message);
+
+        System.out.println("Duplicate name validation message: " + message);
+    }
 }
