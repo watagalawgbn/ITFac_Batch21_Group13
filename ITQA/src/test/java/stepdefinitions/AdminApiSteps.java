@@ -222,4 +222,38 @@ public class AdminApiSteps {
 
         System.out.println("Plant updated successfully: " + returnedName);
     }
+
+    @When("admin sends DELETE request to remove the plant")
+    public void admin_sends_delete_request_to_remove_the_plant() {
+
+        // If plantId is null, fetch the last created/updated plant dynamically
+        if (plantId == null) {
+            response = given()
+                    .header("Authorization", "Bearer " + adminToken)
+                    .header("Content-Type", "application/json")
+                    .when()
+                    .get("/api/plants");
+
+            plantId = response.jsonPath().getLong("[-1].id"); // get the last plant ID
+            plantName = response.jsonPath().getString("[-1].name");
+
+            System.out.println("Fetched last plant ID for delete: " + plantId);
+        }
+
+        response = given()
+                .header("Authorization", "Bearer " + adminToken)
+                .header("Content-Type", "application/json")
+                .when()
+                .delete("/api/plants/" + plantId);
+
+        System.out.println("DELETE request sent for plant ID: " + plantId);
+    }
+
+    @Then("plant should be deleted successfully with status code {int}")
+    public void plant_should_be_deleted_successfully_with_status_code(Integer statusCode) {
+        assertEquals(response.getStatusCode(), statusCode.intValue(),
+                "Unexpected status code after delete");
+
+        System.out.println("Plant deleted successfully: " + plantId);
+    }
 }

@@ -27,3 +27,9 @@ Feature: Admin Plant API
     When admin sends PUT request to update an existing plant
     Then plant should be updated successfully with status code 200
     And updated plant details are returned
+
+  Scenario: Verify admin can delete plant via API
+    Given admin API base URL is set
+    And admin token is available
+    When admin sends DELETE request to remove the plant
+    Then plant should be deleted successfully with status code 204
