@@ -20,3 +20,10 @@ Feature: Admin Plant API
     When admin sends POST request to add a plant with duplicate name
     Then API should return status code 400
     And duplicate name validation message is returned
+
+  Scenario: Verify admin can update plant via API
+    Given admin API base URL is set
+    And admin token is available
+    When admin sends PUT request to update an existing plant
+    Then plant should be updated successfully with status code 200
+    And updated plant details are returned
