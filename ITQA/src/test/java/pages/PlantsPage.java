@@ -17,6 +17,9 @@ public class PlantsPage {
     private By tableRows = By.xpath("//table//tbody//tr");
     private By quantityColumnCells = By.xpath("//table//tbody//tr//td[contains(@class,'quantity') or position()=4]");
     private By lowBadge = By.xpath(".//*[contains(@class,'badge') and contains(text(),'Low')]");
+    private By categoryDropdown = By.xpath("//select[contains(@id,'category') or contains(@name,'category')]");
+    private By searchButton = By.xpath("//button[contains(text(),'Search') or contains(text(),'Filter')]");
+    private By categoryColumnCells = By.xpath("//table//tbody//tr//td[position()=3 or contains(@class,'category')]");
 
     public PlantsPage(WebDriver driver) {
         this.driver = driver;
@@ -286,6 +289,52 @@ public class PlantsPage {
                 if (!row.findElements(lowBadge).isEmpty()) {
                     return false;
                 }
+            }
+        }
+        return true;
+    }
+
+    public void selectCategoryFromDropdown(String categoryName) {
+        WebElement dropdown = driver.findElement(categoryDropdown);
+        org.openqa.selenium.support.ui.Select select =
+                new org.openqa.selenium.support.ui.Select(dropdown);
+        select.selectByVisibleText(categoryName);
+    }
+
+    public void clickSearchButton() {
+        WebElement button = driver.findElement(searchButton);
+        button.click();
+
+        try {
+            Thread.sleep(2000); // wait for filtered results
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int getCategoryColumnIndex() {
+        java.util.List<WebElement> headers = driver.findElements(By.xpath("//table//th"));
+        for (int i = 0; i < headers.size(); i++) {
+            if (headers.get(i).getText().trim().equalsIgnoreCase("Category")) {
+                return i + 1; // XPath index starts at 1
+            }
+        }
+        throw new RuntimeException("Category column not found");
+    }
+
+    public boolean areOnlyPlantsFromCategoryDisplayed(String expectedCategory) {
+        int categoryColIndex = getCategoryColumnIndex();
+
+        java.util.List<WebElement> rows = driver.findElements(By.xpath("//table//tbody//tr"));
+
+        for (WebElement row : rows) {
+            String categoryText = row.findElement(
+                    By.xpath(".//td[" + categoryColIndex + "]")
+            ).getText().trim();
+
+            if (!categoryText.equalsIgnoreCase(expectedCategory)) {
+                System.out.println("Unexpected category found: " + categoryText);
+                return false;
             }
         }
         return true;

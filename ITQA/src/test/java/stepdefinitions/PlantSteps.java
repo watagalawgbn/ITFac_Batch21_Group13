@@ -724,6 +724,27 @@ public class PlantSteps {
         );
         System.out.println("Low badge is hidden for sufficient stock plants");
     }
+
+    @When("user selects category {string} from category dropdown")
+    public void user_selects_category_from_category_dropdown(String category) {
+        plantsPage.selectCategoryFromDropdown(category);
+        System.out.println("User selected category: " + category);
+    }
+
+    @When("user clicks Search button")
+    public void user_clicks_search_button() {
+        plantsPage.clickSearchButton();
+        System.out.println("User clicked Search button");
+    }
+
+    @Then("only plants from category {string} should be displayed")
+    public void only_plants_from_category_should_be_displayed(String category) {
+        Assert.assertTrue(
+                plantsPage.areOnlyPlantsFromCategoryDisplayed(category),
+                "Plants from other categories are displayed"
+        );
+        System.out.println("Only plants from category '" + category + "' are displayed");
+    }
 }
 
 

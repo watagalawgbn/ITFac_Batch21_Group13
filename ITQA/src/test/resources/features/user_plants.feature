@@ -46,5 +46,13 @@ Feature: Normal User Plant Management
     And Low badge should be displayed for plants with low stock
     And Low badge should not be displayed for plants with sufficient stock
 
+  @FilterByCategory
+  Scenario: Verify filtering plants by category for normal user
+    Given user is logged in successfully as a normal user
+    When user navigates to Plants page "/ui/plants"
+    Then Plants page should be displayed
+    When user selects category "Flowers" from category dropdown
+    And user clicks Search button
+    Then only plants from category "Flowers" should be displayed
 
 
