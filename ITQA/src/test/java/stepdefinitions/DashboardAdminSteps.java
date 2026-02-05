@@ -87,3 +87,4 @@ public class DashboardAdminSteps {
         Assert.assertTrue(driver.getCurrentUrl().contains("/ui/sales"));
     }
 }
+ 
