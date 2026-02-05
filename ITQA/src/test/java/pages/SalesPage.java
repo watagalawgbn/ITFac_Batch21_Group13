@@ -7,6 +7,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class SalesPage {
@@ -28,6 +31,12 @@ public class SalesPage {
     // page numbers except active one
     private final By paginationPages =
             By.cssSelector("ul.pagination li.page-item:not(.active):not(.disabled) a.page-link");
+
+    private final By soldDateColumn =
+            By.xpath("//table//tbody/tr/td[4]");
+    private final By soldDateHeader =
+            By.xpath("//th[contains(text(),'Sold Date')]");
+
 
 
     public SalesPage(WebDriver driver){
@@ -131,6 +140,28 @@ public class SalesPage {
         wait.until(ExpectedConditions.stalenessOf(oldRows.get(0)));
     }
 
+
+
+    public List<LocalDateTime> getSoldDatesAfterLoad() {
+        wait.until(ExpectedConditions.or(
+                ExpectedConditions.visibilityOfElementLocated(salesRows),
+                ExpectedConditions.visibilityOfElementLocated(noSalesMessage)
+        ));
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        return driver.findElements(soldDateColumn)
+                .stream()
+                .map(e -> LocalDateTime.parse(e.getText(), formatter))
+                .toList();
+    }
+
+
+
+    public void clickSoldDateHeader() {
+        wait.until(ExpectedConditions.elementToBeClickable(soldDateHeader)).click();
+    }
 
 
 

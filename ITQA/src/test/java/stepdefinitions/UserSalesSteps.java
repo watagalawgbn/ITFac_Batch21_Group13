@@ -7,6 +7,7 @@ import pages.LoginPage;
 import pages.SalesPage;
 import utils.DriverFactory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserSalesSteps {
@@ -50,7 +51,6 @@ public class UserSalesSteps {
         );
     }
 
-
     @And("User clicks the next pagination button")
     public void user_clicks_next_pagination_button() {
 
@@ -84,7 +84,7 @@ public class UserSalesSteps {
                 "No Sales message is not displayed to the user"
         );
     }
-    
+
 
     //SELL BUTTON NOT VISIBLE TO USER________________________________________
     @Then("Sell Plant button should not be visible to the user")
@@ -95,5 +95,27 @@ public class UserSalesSteps {
                 "Sell Plant button is visible for the user"
         );
     }
+
+    //SORTING_______________________________________________________________
+    @Then("Sales should be sorted by sold date in descending order")
+    public void sales_should_be_sorted_by_sold_date_desc() {
+
+        List<LocalDateTime> dates = salesPage.getSoldDatesAfterLoad();
+
+        // If 0 or 1 records, default sorting is trivially correct
+        if (dates.size() < 2) {
+            Assert.assertTrue(true, "Not enough records to validate sorting");
+            return;
+        }
+
+        for (int i = 0; i < dates.size() - 1; i++) {
+            Assert.assertTrue(
+                    !dates.get(i).isBefore(dates.get(i + 1)),
+                    "Sales are not sorted by sold date descending"
+            );
+        }
+    }
+
+
 
 }

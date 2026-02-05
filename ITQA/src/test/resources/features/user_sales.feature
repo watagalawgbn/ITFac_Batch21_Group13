@@ -12,7 +12,7 @@ Feature: User sales management
     And User clicks the next pagination button
     Then Next set of sales records should be displayed
 
-    @noSales
+  @noSales
   Scenario: User sees no sales message when no sales exist
     Given User is logged in
     When User navigates to the sales list page
@@ -22,3 +22,8 @@ Feature: User sales management
     Given User is logged in
     When User navigates to the sales list page
     Then Sell Plant button should not be visible to the user
+
+  Scenario: Sales are sorted by sold date in descending order
+    Given User is logged in
+    When User navigates to the sales list page
+    Then Sales should be sorted by sold date in descending order
