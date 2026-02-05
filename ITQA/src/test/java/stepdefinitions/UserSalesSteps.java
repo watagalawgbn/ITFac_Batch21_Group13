@@ -17,7 +17,7 @@ public class UserSalesSteps {
     private List<String> firstPageSales;
 
 
-    //VIEW SALE LIST
+    //VIEW SALE LIST____________________________________________________________
     @Given("User is logged in")
     public void user_is_logged_in() {
         loginPage = new LoginPage(DriverFactory.getDriver());
@@ -41,7 +41,7 @@ public class UserSalesSteps {
                 "Sales list or No Sales message is not visible to the user");
     }
 
-    //CHECK FOR PAGINATION
+    //CHECK FOR PAGINATION____________________________________________________________
     @And("Pagination controls are visible")
     public void pagination_controls_are_visible() {
         Assert.assertTrue(
@@ -74,4 +74,26 @@ public class UserSalesSteps {
                 "Pagination did not change the sales list"
         );
     }
+
+    //NO SALES MESSAGE_______________________________________________________________-
+    @Then("No sales message should be displayed to the user")
+    public void no_sales_message_should_be_displayed_to_user() {
+
+        Assert.assertTrue(
+                salesPage.isNoSalesMessageDisplayed(),
+                "No Sales message is not displayed to the user"
+        );
+    }
+    
+
+    //SELL BUTTON NOT VISIBLE TO USER________________________________________
+    @Then("Sell Plant button should not be visible to the user")
+    public void sell_plant_button_should_not_be_visible_to_user() {
+
+        Assert.assertFalse(
+                salesPage.isSellPlantButtonVisible(),
+                "Sell Plant button is visible for the user"
+        );
+    }
+
 }
