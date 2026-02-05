@@ -5,7 +5,6 @@ import io.restassured.response.Response;
 
 public class AuthTokenUtil {
 
-    // ===== Existing Admin Token Method (unchanged) =====
     public static String getAdminToken() {
         Response response = RestAssured
             .given()
@@ -13,17 +12,16 @@ public class AuthTokenUtil {
                 .body("{\"username\":\"admin\",\"password\":\"admin123\"}")
             .post("/api/auth/login");
 
-        return "Bearer " + response.jsonPath().getString("token");
+        return response.jsonPath().getString("token");
     }
 
-    // ===== New Method for User Token =====
     public static String getUserToken() {
         Response response = RestAssured
             .given()
                 .contentType("application/json")
-                .body("{\"username\":\"user\",\"password\":\"user123\"}")
+                .body("{\"username\":\"testuser\",\"password\":\"test123\"}")
             .post("/api/auth/login");
 
-        return "Bearer " + response.jsonPath().getString("token");
+        return response.jsonPath().getString("token");
     }
 }
