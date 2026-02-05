@@ -7,7 +7,11 @@ import io.cucumber.java.en.Then;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
+import utils.ConfigReader;
+
 import org.testng.Assert;
+
+import utils.AuthTokenUtil;
 
 import static io.restassured.RestAssured.given;
 
@@ -20,39 +24,11 @@ public class CategoryApiSteps {
     private Response response;
     private String createdCategoryId;
 
-    // Hardcoded credentials
-    private final String ADMIN_USERNAME = "admin";
-    private final String ADMIN_PASSWORD = "admin123";
-
-    private final String USER_USERNAME = "testuser";
-    private final String USER_PASSWORD = "test123";
-
     // ========== AUTHENTICATION ==========
     @Given("{string} is authenticated")
     public void user_or_admin_is_authenticated(String role) {
-        RestAssured.baseURI = "http://localhost:8080";
-
-        String username;
-        String password;
-
-        if (role.equalsIgnoreCase("Admin")) {
-            username = ADMIN_USERNAME;
-            password = ADMIN_PASSWORD;
-        } else {
-            username = USER_USERNAME;
-            password = USER_PASSWORD;
-        }
-
-        Response authResponse =
-            given()
-                .header("Content-Type", "application/json")
-                .body("{\"username\":\"" + username + "\", \"password\":\"" + password + "\"}")
-            .when()
-                .post("/api/auth/login");
-
-        token = authResponse.jsonPath().getString("token");
-        System.out.println("Generated " + role + " Token: " + token);
-        Assert.assertNotNull(token, role + " token should not be null");
+        token = AuthTokenUtil.authenticate(role);
+        System.out.println(role + " token: " + token);
     }
 
     // ========== GET REQUEST ==========
@@ -61,7 +37,7 @@ public class CategoryApiSteps {
         response =
             given()
                 .header("Accept", "application/json")
-                .header("Authorization", "Bearer " + token)
+                .header("Authorization", "Bearer " + token) 
                 .log().all()
             .when()
                 .get(endpoint)
@@ -117,19 +93,40 @@ public class CategoryApiSteps {
                 .extract().response();
     }
 
+    // ========== POST AS MAIN CATEGORY ==========
+    @When("\"Admin\" sends POST request to {string} with category name {string} and empty parent")
+    public void admin_sends_post_request_with_empty_parent(String endpoint, String categoryName) {
+
+        Map<String, Object> category = new HashMap<>();
+        category.put("name", categoryName);
+        category.put("parentName", "");
+
+        response =
+            given()
+                .header("Authorization", "Bearer " + token)
+                .contentType("application/json")
+                .body(category)
+            .when()
+                .post(endpoint)
+            .then()
+                .log().all()
+                .extract().response();
+    }
+
+
     // ========== UPDATE CATEGORY ==========
     @When("{string} updates category with hardcoded ID")
     public void updates_category_with_hardcoded_id(String role) {
-        String categoryId = "16"; // hardcoded for demo
+        String categoryId = "17"; 
 
         Map<String, Object> parent = new HashMap<>();
-        parent.put("id", 14); // parent category ID
+        parent.put("id", 14); 
 
         Map<String, Object> updateBody = new HashMap<>();
         updateBody.put("categoryname", "mini roses Updated");
         updateBody.put("parent", parent);
 
-        // If user role, still send the request to check authorization
+        
         if(role.equalsIgnoreCase("User")) {
             System.out.println("User role is not allowed to update categories. Sending request to test restriction.");
         }
@@ -150,7 +147,7 @@ public class CategoryApiSteps {
     // ========== DELETE CATEGORY ==========
     @When("{string} sends DELETE request to {string}")
     public void sends_delete_request(String role, String endpoint) {
-        // If User role, still send request to test authorization
+        
         if(role.equalsIgnoreCase("User")) {
             System.out.println("User role is not allowed to delete categories. Sending request to test restriction.");
         }
@@ -209,8 +206,15 @@ public class CategoryApiSteps {
         Integer actualId = response.jsonPath().getInt("id");
         Assert.assertEquals(actualId, categoryId, "Returned category ID does not match requested ID");
 
-        // Optional: check name/parent if you want
+        
         String name = response.jsonPath().getString("name");
         Assert.assertNotNull(name, "Category name should not be null");
     }
+
+    @Then("the category should be saved as a main category")
+    public void category_should_be_saved_as_main_category() {
+        Object parentId = response.jsonPath().get("data.parentCategoryId");
+        Assert.assertNull(parentId, "Parent category ID should be null for main category");
+    }
+
 }
