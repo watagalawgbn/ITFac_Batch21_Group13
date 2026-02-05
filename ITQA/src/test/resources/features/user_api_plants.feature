@@ -27,3 +27,10 @@ Feature: User Plant API
     And a plant id is available
     When user sends DELETE request to delete a plant
     Then user receives status code 403
+
+  Scenario: Verify filtering plants by category via API
+    Given user API base URL is set
+    And user token is available
+    When user sends GET request to plants by category
+    Then user receives status code 200
+    And only plants from selected category are returned

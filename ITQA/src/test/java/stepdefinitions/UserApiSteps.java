@@ -146,4 +146,36 @@ public class UserApiSteps {
 
         System.out.println("DELETE request sent for plant ID: " + plantId);
     }
+
+    @When("user sends GET request to plants by category")
+    public void user_sends_get_request_to_plants_by_category() {
+
+        response =
+                given()
+                        .header("Authorization", "Bearer " + userToken)
+                        .header("Content-Type", "application/json")
+                        .when()
+                        .get("/api/plants/category/" + CATEGORY_ID);
+
+        System.out.println("Filter plants by category request sent. Category ID: " + CATEGORY_ID);
+    }
+
+    @And("only plants from selected category are returned")
+    public void only_plants_from_selected_category_are_returned() {
+
+        assertNotNull(response.getBody(), "Response body is null");
+
+        int plantCount = response.jsonPath().getList("$").size();
+        assertTrue(plantCount > 0, "No plants returned for the selected category");
+
+        for (int i = 0; i < plantCount; i++) {
+            Long categoryId =
+                    response.jsonPath().getLong("[" + i + "].category.id");
+
+            assertEquals(categoryId, CATEGORY_ID,
+                    "Plant does not belong to the selected category");
+        }
+
+        System.out.println("All returned plants belong to category ID: " + CATEGORY_ID);
+    }
 }
