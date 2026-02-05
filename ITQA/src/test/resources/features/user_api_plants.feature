@@ -20,3 +20,10 @@ Feature: User Plant API
     And a plant id is available
     When user sends PUT request to update a plant
     Then user receives status code 403
+
+  Scenario: Verify unauthorized plant deletion via API
+    Given user API base URL is set
+    And user token is available
+    And a plant id is available
+    When user sends DELETE request to delete a plant
+    Then user receives status code 403

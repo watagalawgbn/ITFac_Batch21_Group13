@@ -303,14 +303,13 @@ public class PlantsPage {
 
     public void clickSearchButton() {
 
-        String before = driver.findElement(By.xpath("//table//tbody")).getText();
-
-        driver.findElement(searchButton).click();
+        WebElement button = driver.findElement(searchButton);
+        button.click();
 
         new org.openqa.selenium.support.ui.WebDriverWait(driver,
                 java.time.Duration.ofSeconds(10))
-                .until(d ->
-                        !d.findElement(By.xpath("//table//tbody")).getText().equals(before)
+                .until(driver ->
+                        driver.findElements(By.xpath("//table//tbody//tr")).size() > 0
                 );
     }
 

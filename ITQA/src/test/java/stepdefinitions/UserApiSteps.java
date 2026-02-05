@@ -133,4 +133,17 @@ public class UserApiSteps {
                         .when()
                         .put("/api/plants/" + plantId);
     }
+
+    @When("user sends DELETE request to delete a plant")
+    public void user_sends_delete_request_to_delete_a_plant() {
+
+        response =
+                given()
+                        .header("Authorization", "Bearer " + userToken)
+                        .header("Content-Type", "application/json")
+                        .when()
+                        .delete("/api/plants/" + plantId);
+
+        System.out.println("DELETE request sent for plant ID: " + plantId);
+    }
 }
