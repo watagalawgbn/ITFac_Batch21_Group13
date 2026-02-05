@@ -1,4 +1,4 @@
-package stepdefinitions;
+package stepdefinitions.plant.ui;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -8,9 +8,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
-import pages.AddPlantPage;
-import pages.LoginPage;
-import pages.PlantsPage;
+import pages.plant.AddPlantPage;
+import pages.plant.LoginPage;
+import pages.plant.PlantsPage;
 import utils.DriverManager;
 
 import java.util.List;

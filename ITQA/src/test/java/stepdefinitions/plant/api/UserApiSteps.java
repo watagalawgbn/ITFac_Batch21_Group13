@@ -1,4 +1,4 @@
-package stepdefinitions;
+package stepdefinitions.plant.api;
 
 import io.cucumber.java.en.*;
 import io.restassured.response.Response;
