@@ -12,6 +12,7 @@ public class UserApiSteps {
     private Response response;
     private String userToken;
     private final Long CATEGORY_ID = 4L;
+    private Long plantId;
 
     @Given("user API base URL is set")
     public void user_api_base_url_is_set() {
@@ -92,5 +93,44 @@ public class UserApiSteps {
                         .body(requestBody)
                         .when()
                         .post("/api/plants/category/" + CATEGORY_ID);
+    }
+
+    @And("a plant id is available")
+    public void a_plant_id_is_available() {
+
+        Response getResponse =
+                given()
+                        .header("Authorization", "Bearer " + userToken)
+                        .header("Content-Type", "application/json")
+                        .when()
+                        .get("/api/plants");
+
+        assertEquals(getResponse.getStatusCode(), 200, "Failed to fetch plants");
+
+        plantId = getResponse.jsonPath().getLong("[0].id");
+        assertNotNull(plantId, "Plant ID is missing");
+
+        System.out.println("Using plant ID for unauthorized update: " + plantId);
+    }
+
+    @When("user sends PUT request to update a plant")
+    public void user_sends_put_request_to_update_a_plant() {
+
+        String updateRequest = """
+        {
+          "id": %d,
+          "name": "Unauthorized_Update",
+          "price": 999,
+          "quantity": 99
+        }
+        """.formatted(plantId);
+
+        response =
+                given()
+                        .header("Authorization", "Bearer " + userToken)
+                        .header("Content-Type", "application/json")
+                        .body(updateRequest)
+                        .when()
+                        .put("/api/plants/" + plantId);
     }
 }

@@ -302,14 +302,16 @@ public class PlantsPage {
     }
 
     public void clickSearchButton() {
-        WebElement button = driver.findElement(searchButton);
-        button.click();
 
-        try {
-            Thread.sleep(2000); // wait for filtered results
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        String before = driver.findElement(By.xpath("//table//tbody")).getText();
+
+        driver.findElement(searchButton).click();
+
+        new org.openqa.selenium.support.ui.WebDriverWait(driver,
+                java.time.Duration.ofSeconds(10))
+                .until(d ->
+                        !d.findElement(By.xpath("//table//tbody")).getText().equals(before)
+                );
     }
 
     private int getCategoryColumnIndex() {
@@ -323,17 +325,24 @@ public class PlantsPage {
     }
 
     public boolean areOnlyPlantsFromCategoryDisplayed(String expectedCategory) {
-        int categoryColIndex = getCategoryColumnIndex();
 
-        java.util.List<WebElement> rows = driver.findElements(By.xpath("//table//tbody//tr"));
+        java.util.List<WebElement> rows = driver.findElements(tableRows);
+
+        if (rows.isEmpty()) {
+            throw new AssertionError("No rows found after filtering");
+        }
 
         for (WebElement row : rows) {
-            String categoryText = row.findElement(
-                    By.xpath(".//td[" + categoryColIndex + "]")
-            ).getText().trim();
+
+            // Find the Category cell by header text
+            WebElement categoryCell =
+                    row.findElement(By.xpath(".//td[count(//th[normalize-space()='Category']/preceding-sibling::th)+1]"));
+
+            String categoryText = categoryCell.getText().trim();
+
+            System.out.println("Category cell value: " + categoryText);
 
             if (!categoryText.equalsIgnoreCase(expectedCategory)) {
-                System.out.println("Unexpected category found: " + categoryText);
                 return false;
             }
         }

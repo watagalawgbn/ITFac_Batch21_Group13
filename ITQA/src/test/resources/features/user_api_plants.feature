@@ -13,3 +13,10 @@ Feature: User Plant API
     And user token is available
     When user sends POST request to add a plant
     Then user receives status code 403
+
+  Scenario: Verify unauthorized plant update via API
+    Given user API base URL is set
+    And user token is available
+    And a plant id is available
+    When user sends PUT request to update a plant
+    Then user receives status code 403
