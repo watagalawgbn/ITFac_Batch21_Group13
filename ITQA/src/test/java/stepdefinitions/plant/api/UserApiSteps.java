@@ -1,0 +1,181 @@
+package stepdefinitions.plant.api;
+
+import io.cucumber.java.en.*;
+import io.restassured.response.Response;
+import utils.ApiConfig;
+
+import static io.restassured.RestAssured.*;
+import static org.testng.Assert.*;
+
+public class UserApiSteps {
+
+    private Response response;
+    private String userToken;
+    private final Long CATEGORY_ID = 4L;
+    private Long plantId;
+
+    @Given("user API base URL is set")
+    public void user_api_base_url_is_set() {
+        ApiConfig.setBaseURI();
+    }
+
+    @And("user token is available")
+    public void user_token_is_available() {
+
+        userToken =
+                given()
+                        .header("Content-Type", "application/json")
+                        .body("""
+                    {
+                      "username": "testuser",
+                      "password": "test123"
+                    }
+                """)
+                        .when()
+                        .post("/api/auth/login")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .path("token");
+
+        assertNotNull(userToken, "User token is missing");
+        System.out.println("User token generated successfully");
+    }
+
+    @When("user sends GET request to {string}")
+    public void user_sends_get_request_to(String endpoint) {
+        response =
+                given()
+                        .header("Authorization", "Bearer " + userToken)
+                        .header("Content-Type", "application/json")
+                        .when()
+                        .get(endpoint);
+    }
+
+    @Then("user receives status code {int}")
+    public void user_receives_status_code(Integer statusCode) {
+        assertEquals(response.getStatusCode(), statusCode.intValue(),
+                "Unexpected status code");
+    }
+
+    @And("user receives list of plants in response")
+    public void user_receives_list_of_plants_in_response() {
+        assertNotNull(response.getBody(), "Response body is null");
+
+        int plantCount = response.jsonPath().getList("$").size();
+        assertTrue(plantCount > 0, "Plant list is empty");
+
+        System.out.println("User received plant list. Total plants: " + plantCount);
+    }
+
+    @When("user sends POST request to add a plant")
+    public void user_sends_post_request_to_add_a_plant() {
+
+        String requestBody = """
+    {
+      "id": 0,
+      "name": "Unauthorized_Plant",
+      "price": 50,
+      "quantity": 10,
+      "category": {
+        "id": %d,
+        "name": "Flowers",
+        "parent": null,
+        "subCategories": []
+      }
+    }
+    """.formatted(CATEGORY_ID);
+
+        response =
+                given()
+                        .header("Authorization", "Bearer " + userToken)
+                        .header("Content-Type", "application/json")
+                        .body(requestBody)
+                        .when()
+                        .post("/api/plants/category/" + CATEGORY_ID);
+    }
+
+    @And("a plant id is available")
+    public void a_plant_id_is_available() {
+
+        Response getResponse =
+                given()
+                        .header("Authorization", "Bearer " + userToken)
+                        .header("Content-Type", "application/json")
+                        .when()
+                        .get("/api/plants");
+
+        assertEquals(getResponse.getStatusCode(), 200, "Failed to fetch plants");
+
+        plantId = getResponse.jsonPath().getLong("[0].id");
+        assertNotNull(plantId, "Plant ID is missing");
+
+        System.out.println("Using plant ID for unauthorized update: " + plantId);
+    }
+
+    @When("user sends PUT request to update a plant")
+    public void user_sends_put_request_to_update_a_plant() {
+
+        String updateRequest = """
+        {
+          "id": %d,
+          "name": "Unauthorized_Update",
+          "price": 999,
+          "quantity": 99
+        }
+        """.formatted(plantId);
+
+        response =
+                given()
+                        .header("Authorization", "Bearer " + userToken)
+                        .header("Content-Type", "application/json")
+                        .body(updateRequest)
+                        .when()
+                        .put("/api/plants/" + plantId);
+    }
+
+    @When("user sends DELETE request to delete a plant")
+    public void user_sends_delete_request_to_delete_a_plant() {
+
+        response =
+                given()
+                        .header("Authorization", "Bearer " + userToken)
+                        .header("Content-Type", "application/json")
+                        .when()
+                        .delete("/api/plants/" + plantId);
+
+        System.out.println("DELETE request sent for plant ID: " + plantId);
+    }
+
+    @When("user sends GET request to plants by category")
+    public void user_sends_get_request_to_plants_by_category() {
+
+        response =
+                given()
+                        .header("Authorization", "Bearer " + userToken)
+                        .header("Content-Type", "application/json")
+                        .when()
+                        .get("/api/plants/category/" + CATEGORY_ID);
+
+        System.out.println("Filter plants by category request sent. Category ID: " + CATEGORY_ID);
+    }
+
+    @And("only plants from selected category are returned")
+    public void only_plants_from_selected_category_are_returned() {
+
+        assertNotNull(response.getBody(), "Response body is null");
+
+        int plantCount = response.jsonPath().getList("$").size();
+        assertTrue(plantCount > 0, "No plants returned for the selected category");
+
+        for (int i = 0; i < plantCount; i++) {
+            Long categoryId =
+                    response.jsonPath().getLong("[" + i + "].category.id");
+
+            assertEquals(categoryId, CATEGORY_ID,
+                    "Plant does not belong to the selected category");
+        }
+
+        System.out.println("All returned plants belong to category ID: " + CATEGORY_ID);
+    }
+}
