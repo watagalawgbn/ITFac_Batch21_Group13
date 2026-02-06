@@ -3,7 +3,9 @@
 .idea/tasks.xml
 .idea/shelf/
 .idea/httpRequests/
+.idea
 *.iml
+
 
 # Build output
 /out/
@@ -17,4 +19,4 @@
 .DS_Store
 Thumbs.db
 
-
+config.properties
