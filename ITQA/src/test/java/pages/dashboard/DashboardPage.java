@@ -4,14 +4,29 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardPage {
     private WebDriver driver;
+    private WebDriverWait wait;
 
-    // Multiple locator strategies for dashboard elements
+    // ===== Cards locators =====
+    private By categoryCard = By.cssSelector("a[href='/ui/categories']");
+    private By plantsCard = By.cssSelector("a[href='/ui/plants']");
+    private By salesCard = By.cssSelector("a[href='/ui/sales']");
+
+    // ===== Sidebar/Menu locators =====
+    private By dashboardMenu = By.xpath("//div[contains(@class,'sidebar')]//a[contains(@href,'/dashboard')]");
+    private By categoriesMenu = By.xpath("//div[contains(@class,'sidebar')]//a[contains(@href,'/categories')]");
+    private By plantsMenu = By.xpath("//div[contains(@class,'sidebar')]//a[contains(@href,'/plants')]");
+    private By salesMenu = By.xpath("//div[contains(@class,'sidebar')]//a[contains(@href,'/sales')]");
+
+    // ===== Dynamic dashboard locators =====
     private By[] dashboardLocators = {
         By.xpath("//h1[contains(text(),'Dashboard')]"),
         By.xpath("//h2[contains(text(),'Dashboard')]"),
@@ -20,148 +35,153 @@ public class DashboardPage {
         By.className("dashboard")
     };
 
-    // Menu/Navigation locators
-    private By[] menuLocators = {
-        By.xpath("//nav"),
-        By.xpath("//ul[contains(@class,'nav')]"),
-        By.xpath("//div[contains(@class,'menu')]"),
-        By.xpath("//div[contains(@class,'sidebar')]"),
-        By.className("navbar")
-    };
-
-    // Constructor
+    // ===== Constructor =====
     public DashboardPage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         PageFactory.initElements(driver, this);
     }
 
-    // Helper method to find element using multiple locators
+    // ===== Card methods =====
+    public boolean isCategoryCardVisible() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(categoryCard)).isDisplayed();
+    }
+
+    public void clickCategoryCard() {
+        wait.until(ExpectedConditions.elementToBeClickable(categoryCard)).click();
+    }
+
+    public boolean isPlantsCardVisible() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(plantsCard)).isDisplayed();
+    }
+
+    public void clickPlantsCard() {
+        wait.until(ExpectedConditions.elementToBeClickable(plantsCard)).click();
+    }
+
+    public boolean isSalesCardVisible() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(salesCard)).isDisplayed();
+    }
+
+    public void clickSalesCard() {
+        wait.until(ExpectedConditions.elementToBeClickable(salesCard)).click();
+    }
+
+    // ===== Sidebar/Menu methods =====
+    public boolean isDashboardMenuActive() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(dashboardMenu))
+                .getAttribute("class").contains("active");
+    }
+
+    public boolean isCategoriesMenuActive() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(categoriesMenu))
+                .getAttribute("class").contains("active");
+    }
+
+    public boolean isPlantsMenuActive() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(plantsMenu))
+                .getAttribute("class").contains("active");
+    }
+
+    public boolean isSalesMenuActive() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(salesMenu))
+                .getAttribute("class").contains("active");
+    }
+
+    public void clickCategoriesMenu() {
+        wait.until(ExpectedConditions.elementToBeClickable(categoriesMenu)).click();
+    }
+
+    public void clickPlantsMenu() {
+        wait.until(ExpectedConditions.elementToBeClickable(plantsMenu)).click();
+    }
+
+    public void clickSalesMenu() {
+        wait.until(ExpectedConditions.elementToBeClickable(salesMenu)).click();
+    }
+
+    public boolean isCategoriesMenuVisible() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(categoriesMenu)).isDisplayed();
+    }
+
+    public boolean isPlantsMenuVisible() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(plantsMenu)).isDisplayed();
+    }
+
+    public boolean isSalesMenuVisible() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(salesMenu)).isDisplayed();
+    }
+
+    // ===== Dynamic helpers =====
     private WebElement findElement(By[] locators) {
         for (By locator : locators) {
             try {
                 List<WebElement> elements = driver.findElements(locator);
                 if (!elements.isEmpty() && elements.get(0).isDisplayed()) {
-                    System.out.println("Found element using locator: " + locator);
                     return elements.get(0);
                 }
-            } catch (Exception e) {
-                // Continue to next locator
-            }
+            } catch (Exception ignored) {}
         }
         return null;
     }
 
-    // Helper method to check if element exists
     private boolean isElementDisplayed(By[] locators) {
-        WebElement element = findElement(locators);
-        return element != null;
+        return findElement(locators) != null;
     }
 
-    // Check if on dashboard page
     public boolean isOnDashboard() {
         String currentUrl = driver.getCurrentUrl();
-        boolean urlContainsDashboard = currentUrl.contains("dashboard") ||
-                                        currentUrl.contains("admin") ||
-                                        currentUrl.contains("home");
-
-        System.out.println("Current URL: " + currentUrl);
-        System.out.println("Is on dashboard: " + urlContainsDashboard);
-
-        return urlContainsDashboard;
+        return currentUrl.contains("dashboard") || currentUrl.contains("admin") || isElementDisplayed(dashboardLocators);
     }
 
-    // Get all visible menu items
     public List<String> getVisibleMenuItems() {
         List<String> menuItems = new ArrayList<>();
-
-        try {
-            // Try multiple strategies to find menu items
-            List<WebElement> menuElements = driver.findElements(By.xpath("//nav//a | //ul//a | //*[contains(@class,'nav')]//a"));
-
-            System.out.println("Found " + menuElements.size() + " menu items");
-
-            for (WebElement element : menuElements) {
-                if (element.isDisplayed()) {
-                    String text = element.getText();
-                    if (text != null && !text.trim().isEmpty()) {
-                        menuItems.add(text.trim());
-                        System.out.println("Menu item: " + text);
-                    }
-                }
+        List<WebElement> menuElements = driver.findElements(
+            By.xpath("//nav//a | //ul//a | //*[contains(@class,'nav')]//a")
+        );
+        for (WebElement element : menuElements) {
+            if (element.isDisplayed() && !element.getText().isEmpty()) {
+                menuItems.add(element.getText().trim());
             }
-        } catch (Exception e) {
-            System.out.println("Error getting menu items: " + e.getMessage());
         }
-
         return menuItems;
     }
 
-    // Check if specific menu is visible
     public boolean isMenuVisible(String menuName) {
-        try {
-            // Search for menu by text
-            List<WebElement> elements = driver.findElements(
-                By.xpath("//*[contains(text(),'" + menuName + "')] | " +
-                         "//*[contains(@href,'" + menuName.toLowerCase() + "')]")
-            );
-
-            for (WebElement element : elements) {
-                if (element.isDisplayed()) {
-                    System.out.println("Menu '" + menuName + "' is visible");
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Error checking menu visibility: " + e.getMessage());
+        List<WebElement> elements = driver.findElements(
+            By.xpath("//*[contains(text(),'" + menuName + "')] | //*[contains(@href,'" + menuName.toLowerCase() + "')]")
+        );
+        for (WebElement element : elements) {
+            if (element.isDisplayed()) return true;
         }
-
-        System.out.println("Menu '" + menuName + "' is NOT visible");
         return false;
     }
 
-    // Click on a menu item
     public void clickMenu(String menuName) {
-        try {
-            List<WebElement> elements = driver.findElements(
-                By.xpath("//a[contains(text(),'" + menuName + "')] | " +
-                         "//button[contains(text(),'" + menuName + "')] | " +
-                         "//*[contains(@href,'" + menuName.toLowerCase() + "')]")
-            );
-
-            for (WebElement element : elements) {
-                if (element.isDisplayed()) {
-                    System.out.println("Clicking menu: " + menuName);
-                    element.click();
-
-                    // Wait for page to load
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    return;
-                }
+        List<WebElement> elements = driver.findElements(
+            By.xpath("//a[contains(text(),'" + menuName + "')] | //button[contains(text(),'" + menuName + "')] | //*[contains(@href,'" + menuName.toLowerCase() + "')]")
+        );
+        for (WebElement element : elements) {
+            if (element.isDisplayed()) {
+                element.click();
+                try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+                return;
             }
-
-            System.out.println("Could not find menu to click: " + menuName);
-        } catch (Exception e) {
-            System.out.println("Error clicking menu: " + e.getMessage());
         }
     }
 
-    // Check if feature is accessible
     public boolean isFeatureAccessible(String featureName) {
         String currentUrl = driver.getCurrentUrl();
         String pageSource = driver.getPageSource().toLowerCase();
-
-        boolean isAccessible = currentUrl.toLowerCase().contains(featureName.toLowerCase()) ||
-                               pageSource.contains(featureName.toLowerCase());
-
-        System.out.println("Feature '" + featureName + "' accessible: " + isAccessible);
-        return isAccessible;
+        return currentUrl.toLowerCase().contains(featureName.toLowerCase()) ||
+               pageSource.contains(featureName.toLowerCase());
     }
 
-    // Admin-specific feature checks based on access control matrix
+    public String getCurrentUrl() {
+        return driver.getCurrentUrl();
+    }
+
+    // ===== Feature-specific methods =====
 
     // Dashboard
     public boolean canViewDashboard() {
@@ -179,19 +199,11 @@ public class DashboardPage {
     }
 
     public boolean canAddEditDeleteCategory() {
-        // Check if add/edit/delete buttons are present
         try {
             List<WebElement> actionButtons = driver.findElements(
-                By.xpath("//button[contains(text(),'Add')] | " +
-                         "//button[contains(text(),'Edit')] | " +
-                         "//button[contains(text(),'Delete')] | " +
-                         "//a[contains(text(),'Add')] | " +
-                         "//a[contains(text(),'Create')]")
+                By.xpath("//button[contains(text(),'Add')] | //button[contains(text(),'Edit')] | //button[contains(text(),'Delete')] | //a[contains(text(),'Add')] | //a[contains(text(),'Create')]")
             );
-
-            boolean hasActions = !actionButtons.isEmpty();
-            System.out.println("Can add/edit/delete categories: " + hasActions);
-            return hasActions;
+            return !actionButtons.isEmpty();
         } catch (Exception e) {
             return false;
         }
@@ -210,14 +222,9 @@ public class DashboardPage {
     public boolean canAddEditDeletePlant() {
         try {
             List<WebElement> actionButtons = driver.findElements(
-                By.xpath("//button[contains(text(),'Add')] | " +
-                         "//button[contains(text(),'Edit')] | " +
-                         "//button[contains(text(),'Delete')]")
+                By.xpath("//button[contains(text(),'Add')] | //button[contains(text(),'Edit')] | //button[contains(text(),'Delete')]")
             );
-
-            boolean hasActions = !actionButtons.isEmpty();
-            System.out.println("Can add/edit/delete plants: " + hasActions);
-            return hasActions;
+            return !actionButtons.isEmpty();
         } catch (Exception e) {
             return false;
         }
@@ -236,15 +243,9 @@ public class DashboardPage {
     public boolean canCreateSale() {
         try {
             List<WebElement> createButtons = driver.findElements(
-                By.xpath("//button[contains(text(),'Create')] | " +
-                         "//button[contains(text(),'Add')] | " +
-                         "//a[contains(text(),'Create')] | " +
-                         "//a[contains(text(),'New Sale')]")
+                By.xpath("//button[contains(text(),'Create')] | //button[contains(text(),'Add')] | //a[contains(text(),'Create')] | //a[contains(text(),'New Sale')]")
             );
-
-            boolean canCreate = !createButtons.isEmpty();
-            System.out.println("Can create sale: " + canCreate);
-            return canCreate;
+            return !createButtons.isEmpty();
         } catch (Exception e) {
             return false;
         }
@@ -253,19 +254,15 @@ public class DashboardPage {
     public boolean canDeleteSale() {
         try {
             List<WebElement> deleteButtons = driver.findElements(
-                By.xpath("//button[contains(text(),'Delete')] | " +
-                         "//a[contains(text(),'Delete')]")
+                By.xpath("//button[contains(text(),'Delete')] | //a[contains(text(),'Delete')]")
             );
-
-            boolean canDelete = !deleteButtons.isEmpty();
-            System.out.println("Can delete sale: " + canDelete);
-            return canDelete;
+            return !deleteButtons.isEmpty();
         } catch (Exception e) {
             return false;
         }
     }
 
-    // Print all available menus for debugging
+    // ===== Debug & Navigation =====
     public void printAllMenus() {
         System.out.println("========== DASHBOARD MENU INSPECTION ==========");
         List<String> menus = getVisibleMenuItems();
@@ -276,29 +273,18 @@ public class DashboardPage {
         System.out.println("============================================");
     }
 
-    // Navigate through all menus
     public List<String> navigateThroughAllMenus() {
         List<String> accessibleMenus = new ArrayList<>();
         List<String> menus = getVisibleMenuItems();
-
         for (String menu : menus) {
             try {
                 clickMenu(menu);
                 Thread.sleep(1000);
-
                 if (isFeatureAccessible(menu)) {
                     accessibleMenus.add(menu);
-                    System.out.println("Successfully accessed: " + menu);
                 }
-            } catch (Exception e) {
-                System.out.println("Could not access: " + menu);
-            }
+            } catch (Exception ignored) {}
         }
-
         return accessibleMenus;
-    }
-
-    public String getCurrentUrl() {
-        return driver.getCurrentUrl();
     }
 }

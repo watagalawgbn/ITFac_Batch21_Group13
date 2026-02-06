@@ -3,7 +3,9 @@
 .idea/tasks.xml
 .idea/shelf/
 .idea/httpRequests/
+.idea
 *.iml
+
 
 # Build output
 /out/
@@ -16,5 +18,8 @@
 # OS files
 .DS_Store
 Thumbs.db
+
+# properties files
+*.properties
 
 

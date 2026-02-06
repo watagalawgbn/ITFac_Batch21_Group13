@@ -5,32 +5,178 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.plant.PlantsPage;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+
+import pages.plant.PlantsPage;
+
+
+
 public class SalesPage {
-
-    private WebDriver driver;
-    private WebDriverWait wait;
-
-    // Locators
-    private By salesTable = By.tagName("table");
+    private final WebDriver driver;
+    private final WebDriverWait wait;
+    //locator for the sales table
+    private final By salesTable = By.cssSelector("table.table-bordered.table-striped.align-middle");
+    private final By salesRows = By.xpath("//table//tbody/tr");
     private By salesTableRows = By.cssSelector("table tbody tr");
     private By tableHeaders = By.cssSelector("table thead th");
     private By editButtons = By.xpath("//button[contains(text(),'Edit') or contains(@class,'edit')]");
     private By deleteButtons = By.xpath("//button[contains(text(),'Delete') or contains(@class,'delete')]");
-    private By noSalesMessage = By.xpath("//*[contains(text(),'No sales found') or contains(text(),'no sales') or contains(text(),'No records')]");
     private By totalPriceColumn = By.xpath("//td[contains(@class,'total') or position()=last()]");
     private By quantityColumn = By.xpath("//td[contains(@class,'quantity')]");
     private By unitPriceColumn = By.xpath("//td[contains(@class,'price') or contains(@class,'unit')]");
+    private final By deleteButtonInRow = By.xpath(".//button[contains(@class,'btn-outline-danger')]");
+    private final By noSalesMessage = By.xpath("//*[text() = 'No sales found']");
+    private final By sellPlantButton = By.xpath("//a[contains(text(), 'Sell Plant')]");
 
-    // Constructor
-    public SalesPage(WebDriver driver) {
+    // pagination container
+    private final By pagination = By.cssSelector("ul.pagination");
+    // page numbers except active one
+    private final By paginationPages = By.cssSelector("ul.pagination li.page-item:not(.active):not(.disabled) a.page-link");
+
+    private final By soldDateColumn = By.xpath("//table//tbody/tr/td[4]");
+    private final By soldDateHeader = By.xpath("//th[contains(text(),'Sold Date')]");
+
+
+    public SalesPage(WebDriver driver){
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
+
+    public boolean isSalesListDisplayed(){
+        try{
+            wait.until(ExpectedConditions.visibilityOfElementLocated(salesTable));
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+    }
+
+    //     // Empty state verification
+    // public boolean isNoSalesMessageDisplayed() {
+    //     try {
+    //         wait.until(ExpectedConditions.presenceOfElementLocated(noSalesMessage));
+    //         WebElement message = driver.findElement(noSalesMessage);
+    //         String messageText = message.getText();
+    //         System.out.println("No sales message displayed: " + messageText);
+    //         return message.isDisplayed() && messageText.toLowerCase().contains("no sales");
+    //     } catch (Exception e) {
+    //         System.err.println("No sales message not found: " + e.getMessage());
+    //         return false;
+    //     }
+    // }
+
+    public boolean isNoSalesMessageDisplayed(){
+        try{
+            wait.until(ExpectedConditions.visibilityOfElementLocated(noSalesMessage));
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean isSellPlantButtonVisible(){
+        try{
+            wait.until(ExpectedConditions.visibilityOfElementLocated(sellPlantButton));
+            return true;
+        } catch (Exception e){
+            return false;
+
+
+        }
+    }
+
+    public SellPlantPage clickSellPlantButton(){
+        wait.until(ExpectedConditions.elementToBeClickable(sellPlantButton)).click();
+        return new SellPlantPage(driver);
+    }
+
+
+
+    public int getSalesCount(){
+        List<WebElement> rows = driver.findElements(salesRows);
+        return rows.size();
+    }
+
+    public void clickFirstDeleteButton() {
+        WebElement table =
+                wait.until(ExpectedConditions.visibilityOfElementLocated(salesTable));
+        List<WebElement> rows = table.findElements(By.xpath(".//tbody/tr"));
+        if (rows.isEmpty()) {
+            throw new RuntimeException("No sales available to delete");
+        }
+        WebElement deleteBtn = rows.get(0).findElement(
+                By.xpath(".//button[contains(@class,'btn-outline-danger')]")
+        );
+        deleteBtn.click();
+    }
+
+    public void acceptDeleteAlert(){
+        wait.until(ExpectedConditions.alertIsPresent());
+        driver.switchTo().alert().accept();
+    }
+
+    public boolean isSaleDeleted(int beforeCount){
+        if (beforeCount == 1) {
+            return isNoSalesMessageDisplayed();
+        }
+        return getSalesCount() == beforeCount - 1;
+    }
+
+
+    //-------------USER----------------------------
+    public boolean isPaginationVisible() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(pagination));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public List<String> getCurrentPageSaleIds() {
+        List<WebElement> rows = driver.findElements(salesRows);
+        return rows.stream()
+                .map(row -> row.getText())
+                .toList();
+    }
+
+    public void clickNextPage() {
+        List<WebElement> oldRows =
+                wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(salesRows));
+
+        List<WebElement> pages =
+                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(paginationPages));
+
+        if (pages.isEmpty()) {
+            throw new RuntimeException("No enabled pagination pages available");
+        }
+
+        wait.until(ExpectedConditions.elementToBeClickable(pages.get(0))).click();
+        wait.until(ExpectedConditions.stalenessOf(oldRows.get(0)));
+    }
+
+
+
+    public List<LocalDateTime> getSoldDatesAfterLoad() {
+        wait.until(ExpectedConditions.or(
+                ExpectedConditions.visibilityOfElementLocated(salesRows),
+                ExpectedConditions.visibilityOfElementLocated(noSalesMessage)
+        ));
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        return driver.findElements(soldDateColumn)
+                .stream()
+                .map(e -> LocalDateTime.parse(e.getText(), formatter))
+                .toList();
+    }
+
 
     // Page verification methods
     public boolean isOnSalesPage() {
@@ -326,19 +472,7 @@ public class SalesPage {
         }
     }
 
-    // Empty state verification
-    public boolean isNoSalesMessageDisplayed() {
-        try {
-            wait.until(ExpectedConditions.presenceOfElementLocated(noSalesMessage));
-            WebElement message = driver.findElement(noSalesMessage);
-            String messageText = message.getText();
-            System.out.println("No sales message displayed: " + messageText);
-            return message.isDisplayed() && messageText.toLowerCase().contains("no sales");
-        } catch (Exception e) {
-            System.err.println("No sales message not found: " + e.getMessage());
-            return false;
-        }
-    }
+
 
     public String getNoSalesMessage() {
         try {
