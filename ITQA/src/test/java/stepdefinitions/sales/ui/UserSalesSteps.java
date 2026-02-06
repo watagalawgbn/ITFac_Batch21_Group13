@@ -3,7 +3,7 @@ package stepdefinitions.sales.ui;
 import io.cucumber.java.en.*;
 import org.testng.Assert;
 import pages.DashboardPage;
-import pages.LoginPage;
+import pages.LoginPageBuddhini;
 import pages.sales.SalesPage;
 import utils.DriverFactory;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class UserSalesSteps {
 
-    private LoginPage loginPage;
+    private LoginPageBuddhini loginPageBuddhini;
     private DashboardPage dashboardPage;
     private SalesPage salesPage;
     private List<String> firstPageSales;
@@ -21,9 +21,9 @@ public class UserSalesSteps {
     //TC_UI_Sales_18 - VIEW SALE LIST____________________________________________________________
     @Given("User is logged in")
     public void user_is_logged_in() {
-        loginPage = new LoginPage(DriverFactory.getDriver());
-        loginPage.open();
-        dashboardPage = loginPage.login("testuser", "test123");
+        loginPageBuddhini = new LoginPageBuddhini(DriverFactory.getDriver());
+        loginPageBuddhini.open();
+        dashboardPage = loginPageBuddhini.login("testuser", "test123");
     }
 
     @When("User navigates to the sales list page")
