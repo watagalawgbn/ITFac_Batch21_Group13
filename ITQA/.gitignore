@@ -19,4 +19,7 @@
 .DS_Store
 Thumbs.db
 
-config.properties
+# properties files
+*.properties
+
+

@@ -131,5 +131,4 @@ public class AdminSalesSteps {
 
         Assert.assertTrue(isDeleted, "Sale was not deleted successfully");
     }
-
 }

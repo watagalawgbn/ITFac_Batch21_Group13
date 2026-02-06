@@ -17,18 +17,17 @@ public class AdminSalesApiSteps {
     private Long plantId;
     private Long saleId;
 
-
-
     // ----------------- Token -----------------
-    @Given("{word} token is available")
+    @Given("{string} token is available")
     public void token_is_available(String role) {
         token = AuthTokenUtil.authenticate(role.toLowerCase());
         assertNotNull(token, role + " token should not be null");
+        System.out.println(role + " token: " + token);
     }
 
     // ----------------- GET request -----------------
-    @When("{word} sends GET request to {string}")
-    public void sends_get_request(String role, String endpoint) {
+    @When("{string} sends GET request to {string}")
+    public void sends_get_sales(String role, String endpoint) {
         response = given()
                 .header("Authorization", "Bearer " + token)
                 .when()
@@ -53,8 +52,25 @@ public class AdminSalesApiSteps {
         assertNotNull(plantId);
     }
 
-    @When("{word} sends POST request to create sale with quantity {int}")
+    @Given("A plant with no stock exists")
+    public void a_plant_with_no_stock_exists() {
+        plantId = 1L;
+        assertNotNull(plantId);
+    }
+
+    @When("{string} sends POST request to create sale with quantity {int}")
     public void sends_post_request_create_sale(String role, int quantity) {
+        response = given()
+                .header("Authorization", "Bearer " + token)
+                .pathParam("plantId", plantId)
+                .queryParam("quantity", quantity)
+                .when()
+                .post("/api/sales/plant/{plantId}");
+
+    }
+
+    @When("{string} sends POST request to create sale with plantId {int} and quantity {int}")
+    public void sends_post_request_to_create_sale_with_plantId_and_quantity(String role, int plantId, int quantity) {
         response = given()
                 .header("Authorization", "Bearer " + token)
                 .pathParam("plantId", plantId)
@@ -63,20 +79,12 @@ public class AdminSalesApiSteps {
                 .post("/api/sales/plant/{plantId}");
     }
 
-    @Then("Sale should be created successfully")
-    public void sale_should_be_created_successfully() {
+    @Then("Sale should be created via api successfully")
+    public void sale_should_be_created_via_api_successfully() {
         saleId = response.jsonPath().getLong("id");
         assertNotNull(saleId, "Sale ID should be generated");
         assertTrue(response.jsonPath().getInt("quantity") > 0, "Sold quantity > 0");
     }
-
-    //TC -4 - prevents sales when stocks is unavailable
-    @Given("A plant with no stock exists")
-    public void a_plant_with_no_stock_exists() {
-        plantId = 1L;
-        assertNotNull(plantId);
-    }
-
 
     @Then("Error message should indicate stock unavailability")
     public void error_message_should_indicate_stock_unavailability() {
@@ -104,7 +112,7 @@ public class AdminSalesApiSteps {
         assertNotNull(saleId);
     }
 
-    @When("{word} sends DELETE request for the sale")
+    @When("{string} sends DELETE request for the sale")
     public void sends_delete_request_for_sale(String role) {
         response = given()
                 .header("Authorization", "Bearer " + token)
@@ -113,8 +121,8 @@ public class AdminSalesApiSteps {
                 .delete("/api/sales/{id}");
     }
 
-    @Then("Sale should be deleted successfully")
-    public void sale_should_be_deleted_successfully() {
+    @Then("Sale should be deleted via api successfully")
+    public void sale_should_be_deleted_via_api_successfully() {
         Response getResponse = given()
                 .header("Authorization", "Bearer " + token)
                 .pathParam("saleId", saleId)
@@ -124,7 +132,7 @@ public class AdminSalesApiSteps {
     }
 
     // ----------------- GET Sales with pagination -----------------
-    @When("{word} sends GET request to {string} with page {int} and size {int}")
+    @When("{string} sends GET request to {string} with page {int} and size {int}")
     public void sends_get_request_with_page_and_size(String role, String endpoint, int page, int size) {
         response = given()
                 .header("Authorization", "Bearer " + token)
@@ -135,15 +143,19 @@ public class AdminSalesApiSteps {
                 .get(endpoint);
     }
 
+    @Then("Response should contain maximum {int} sales records")
+    public void response_should_contain_maximum_sales_records(Integer maxRecords) {
+        List<Object> salesList = response.jsonPath().getList("content");
+        assertNotNull(salesList, "Sales list should not be null");
+        assertTrue(salesList.size() <= maxRecords,
+                "Sales list should have at most " + maxRecords + " records");
+    }
 
-    @When("{word} sends POST request to create sale with plantId {int} and quantity {int}")
-    public void sends_post_request_to_create_sale_with_plantId_and_quantity(String role, int plantId, int quantity) {
-        response = given()
-                .header("Authorization", "Bearer " + token)
-                .pathParam("plantId", plantId)
-                .queryParam("quantity", quantity)
-                .when()
-                .post("/api/sales/plant/{plantId}");
+    @Then("Response should contain an empty sales list")
+    public void response_should_contain_empty_sales_list() {
+        List<Object> salesList = response.jsonPath().getList("content");
+        assertNotNull(salesList, "Sales list should not be null");
+        assertEquals(salesList.size(), 0, "Sales list should be empty");
     }
 
     @Then("Response should indicate access denied")
@@ -153,23 +165,4 @@ public class AdminSalesApiSteps {
         assertTrue(msg.toLowerCase().contains("access") || msg.toLowerCase().contains("unauthorized"),
                 "Message should indicate access denied or unauthorized");
     }
-
-
-    @Then("Response should contain maximum {int} sales records")
-    public void response_should_contain_maximum_sales_records(Integer maxRecords) {
-        List<Object> salesList = response.jsonPath().getList("content");
-        assertNotNull(salesList, "Sales list should not be null");
-        assertTrue(salesList.size() <= maxRecords,
-                "Sales list should have at most " + maxRecords + " records");
-    }
-
-
-    @Then("Response should contain an empty sales list")
-    public void response_should_contain_empty_sales_list() {
-        List<Object> salesList = response.jsonPath().getList("content");
-        assertNotNull(salesList, "Sales list should not be null");
-        assertEquals(salesList.size(), 0, "Sales list should be empty");
-    }
-
-
 }

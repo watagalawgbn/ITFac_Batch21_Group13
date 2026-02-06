@@ -1,15 +1,15 @@
-package runners.sales.ui;
+package runners.ui;
 
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
-        features = "src/test/resources/features/sales/ui",
+        features = "src/test/resources/features",
         glue = {
-                "stepdefinitions.sales.ui",
+                "stepdefinitions",
                 "utils"
         },
-        tags = "@user",
+        tags = "@ui",
         plugin = {
                 "pretty",
                 "html:target/cucumber-reports-sales-ui.html"

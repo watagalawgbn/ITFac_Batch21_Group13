@@ -1,5 +1,6 @@
 package utils;
 
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.testng.Assert;
 
@@ -11,10 +12,13 @@ public class AuthTokenUtil {
 
     private static String token;
 
+    /**
+     * Authenticate a role (Admin/User) via API
+     * Returns the JWT token
+     */
     public static String authenticate(String role) {
 
-        String username;
-        String password;
+        String username, password;
 
         if (role.equalsIgnoreCase("admin")) {
             username = ConfigReader.get("admin.username");
@@ -24,17 +28,18 @@ public class AuthTokenUtil {
             password = ConfigReader.get("user.password");
         }
 
-        Response response =
-                given()
-                        .contentType("application/json")
-                        .body(Map.of(
-                                "username", username,
-                                "password", password
-                        ))
-                        .when()
-                        .post("/api/auth/login");
+        RestAssured.baseURI = ConfigReader.get("base.url");
 
-        token = response.jsonPath().getString("token");
+        Response authResponse = given()
+                .contentType("application/json")
+                .body(Map.of(
+                        "username", username,
+                        "password", password
+                ))
+                .when()
+                .post("/api/auth/login");
+
+        token = authResponse.jsonPath().getString("token");
         Assert.assertNotNull(token, role + " token should not be null");
 
         return token;

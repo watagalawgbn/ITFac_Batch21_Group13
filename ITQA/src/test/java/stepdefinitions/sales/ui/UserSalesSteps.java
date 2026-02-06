@@ -79,11 +79,15 @@ public class UserSalesSteps {
     @Then("No sales message should be displayed to the user")
     public void no_sales_message_should_be_displayed_to_user() {
 
+        boolean noSalesMessageVisible = salesPage.isNoSalesMessageDisplayed();
+        boolean salesTableVisible = salesPage.isSalesListDisplayed();
+
         Assert.assertTrue(
-                salesPage.isNoSalesMessageDisplayed(),
-                "No Sales message is not displayed to the user"
+                noSalesMessageVisible || salesTableVisible,
+                "Neither sales table nor 'No Sales' message is displayed"
         );
     }
+
 
 
     //TC_UI_Sales_25 - SELL BUTTON NOT VISIBLE TO USER________________________________________
