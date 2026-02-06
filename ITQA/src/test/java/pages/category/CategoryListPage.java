@@ -1,4 +1,4 @@
-package pages;
+package pages.category;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

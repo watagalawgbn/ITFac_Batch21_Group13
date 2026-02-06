@@ -1,3 +1,4 @@
+@ui
 Feature: User Dashboard UI Validation
 
   @user

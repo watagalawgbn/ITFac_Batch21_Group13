@@ -9,7 +9,10 @@ import io.cucumber.testng.CucumberOptions;
         tags = "@ui",
         plugin = {
                 "pretty",
-                "html:target/cucumber-reports-ui.html"
+                "html:target/cucumber-reports.html",
+                "json:target/cucumber.json",
+                "junit:target/cucumber.xml",
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         },
         monochrome = true
 )

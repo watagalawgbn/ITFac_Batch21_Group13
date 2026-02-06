@@ -31,14 +31,14 @@ public class PlantSteps {
     // Background Steps
     @Given("user navigates to the application")
     public void user_navigates_to_the_application() {
-        driver.navigate().to("http://localhost:8080/ui/login");
+        driver.navigate().to("http://localhost:8081/ui/login");
         System.out.println("User navigated to the application");
     }
 
     // Login Steps
     @Given("admin user is on the login page")
     public void admin_user_is_on_the_login_page() {
-        loginPage.navigateToLoginPage("http://localhost:8080/ui/login");
+        loginPage.navigateToLoginPage("http://localhost:8081/ui/login");
         Assert.assertTrue(loginPage.isLoginPageDisplayed(), "Login page is not displayed");
         System.out.println("Admin user is on the login page");
     }
@@ -247,8 +247,8 @@ public class PlantSteps {
         System.out.println("Validation messages appear for mandatory fields");
     }
 
-    @Then("validation message {string} should be displayed")
-    public void validation_message_should_be_displayed(String expectedMessage) {
+    @Then("validation message {string} should displayed")
+    public void validation_message_should_displayed(String expectedMessage) {
         Assert.assertTrue(addPlantPage.hasValidationMessageForField(expectedMessage),
             "Validation message '" + expectedMessage + "' is not displayed");
         System.out.println("Validation message displayed: " + expectedMessage);
@@ -278,7 +278,7 @@ public class PlantSteps {
             String url = driver.getCurrentUrl();
             if (!url.contains("/plants/add")) {
                 // Navigate to the add plant page
-                driver.navigate().to("http://localhost:8080" + path);
+                driver.navigate().to("http://localhost:8081" + path);
                 System.out.println("Navigated to Add Plant page: " + path);
             }
 
@@ -549,7 +549,7 @@ public class PlantSteps {
 
     @Given("user is on the login page")
     public void user_is_on_the_login_page() {
-        loginPage.navigateToLoginPage("http://localhost:8080/ui/login");
+        loginPage.navigateToLoginPage("http://localhost:8081/ui/login");
         Assert.assertTrue(loginPage.isLoginPageDisplayed(), "Login page is not displayed");
         System.out.println("User is on the login page");
     }

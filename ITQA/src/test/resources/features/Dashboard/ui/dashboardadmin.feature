@@ -1,3 +1,4 @@
+@ui
 Feature: Admin Dashboard UI Validation
 
   @admin

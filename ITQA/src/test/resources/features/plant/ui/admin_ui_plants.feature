@@ -66,7 +66,7 @@ Feature: Admin User Plant Management
     And admin user enters quantity "5"
     And admin user selects category "Flowers"
     And admin user clicks Save button
-    Then validation message "Plant name must be between 3 and 25 characters" should be displayed
+    Then validation message "Plant name must be between 3 and 25 characters" should displayed
     And plant should not be saved
     And user should remain on the Add Plant page "/ui/plants/add"
 
@@ -78,7 +78,7 @@ Feature: Admin User Plant Management
     And admin user enters quantity "5"
     And admin user selects category "Flowers"
     And admin user clicks Save button
-    Then validation message "Plant name must be between 3 and 25 characters" should be displayed
+    Then validation message "Plant name must be between 3 and 25 characters" should displayed
     And plant should not be saved
     And user should remain on the Add Plant page "/ui/plants/add"
 
@@ -98,7 +98,7 @@ Feature: Admin User Plant Management
     And admin user enters quantity "5"
     And admin user selects category "Flowers"
     And admin user clicks Save button
-    Then validation message "Price must be greater than 0" should be displayed
+    Then validation message "Price must be greater than 0" should displayed
     And plant should not be saved
     And user should remain on the Add Plant page "/ui/plants/add"
 
@@ -110,7 +110,7 @@ Feature: Admin User Plant Management
     And admin user enters quantity "5"
     And admin user selects category "Flowers"
     And admin user clicks Save button
-    Then validation message "Price must be greater than 0" should be displayed
+    Then validation message "Price must be greater than 0" should displayed
     And plant should not be saved
     And user should remain on the Add Plant page "/ui/plants/add"
 
