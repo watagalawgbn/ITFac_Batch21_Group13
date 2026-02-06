@@ -12,7 +12,7 @@ import io.cucumber.testng.CucumberOptions;
         tags = "@ui",
         plugin = {
                 "pretty",
-                "html:target/cucumber-reports-sales-ui.html"
+                "html:target/cucumber-reports.html"
         },
         monochrome = true
 )

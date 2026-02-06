@@ -48,7 +48,7 @@ public class AdminSalesApiSteps {
     // ----------------- POST request -----------------
     @Given("A plant with available stock exists")
     public void a_plant_with_available_stock_exists() {
-        plantId = 2L;
+        plantId = 3L;
         assertNotNull(plantId);
     }
 
