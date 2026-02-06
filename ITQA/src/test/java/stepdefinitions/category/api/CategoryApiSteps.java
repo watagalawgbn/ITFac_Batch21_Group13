@@ -32,8 +32,8 @@ public class CategoryApiSteps {
     }
 
     // ========== GET REQUEST ==========
-    @When("{string} sends GET request to {string}")
-    public void sends_get_request(String role, String endpoint) {
+    @When("{string} sends GET request to categories endpoint {string}")
+    public void sends_get_categories(String role, String endpoint) {
         response =
             given()
                 .header("Accept", "application/json")
@@ -57,7 +57,7 @@ public class CategoryApiSteps {
 
         Map<String, Object> category = new HashMap<>();
         category.put("name", name);
-        category.put("parentName", parent);
+        category.put("parent", parent);
 
         response =
             given()
