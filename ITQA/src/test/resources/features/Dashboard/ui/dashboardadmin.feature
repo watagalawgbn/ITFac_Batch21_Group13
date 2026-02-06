@@ -32,3 +32,15 @@ Feature: Admin Dashboard UI Validation
     Given admin is logged into the dashboard
     When admin clicks on Sales dashboard card
     Then admin should be navigated to Sales page
+
+  @admin
+  Scenario: Categories menu highlight on sidebar
+    Given admin is logged into the dashboard
+    When admin clicks on Categories menu
+    Then Categories menu should be highlighted
+
+  @admin
+  Scenario: Plants menu highlight on sidebar
+    Given admin is logged into the dashboard
+    When admin clicks on Plants menu
+    Then Plants menu should be highlighted

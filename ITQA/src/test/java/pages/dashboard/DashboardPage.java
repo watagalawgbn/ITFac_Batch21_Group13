@@ -29,7 +29,7 @@ public class DashboardPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    // ========== CARDS ==========
+    // ===== CARDS =====
     public boolean isCategoryCardVisible() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(categoryCard)).isDisplayed();
     }
@@ -54,11 +54,37 @@ public class DashboardPage {
         wait.until(ExpectedConditions.elementToBeClickable(salesCard)).click();
     }
 
-    // ========== SIDEBAR ==========
+    // ===== SIDEBAR MENU =====
     public boolean isDashboardMenuActive() {
-        WebElement elem = wait.until(ExpectedConditions.visibilityOfElementLocated(dashboardMenu));
-        String classes = elem.getAttribute("class");
-        return classes.contains("active");
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(dashboardMenu))
+                .getAttribute("class").contains("active");
+    }
+
+    public boolean isCategoriesMenuActive() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(categoriesMenu))
+                .getAttribute("class").contains("active");
+    }
+
+    public boolean isPlantsMenuActive() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(plantsMenu))
+                .getAttribute("class").contains("active");
+    }
+
+    public boolean isSalesMenuActive() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(salesMenu))
+                .getAttribute("class").contains("active");
+    }
+
+    public void clickCategoriesMenu() {
+        wait.until(ExpectedConditions.elementToBeClickable(categoriesMenu)).click();
+    }
+
+    public void clickPlantsMenu() {
+        wait.until(ExpectedConditions.elementToBeClickable(plantsMenu)).click();
+    }
+
+    public void clickSalesMenu() {
+        wait.until(ExpectedConditions.elementToBeClickable(salesMenu)).click();
     }
 
     public boolean isCategoriesMenuVisible() {
@@ -73,3 +99,4 @@ public class DashboardPage {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(salesMenu)).isDisplayed();
     }
 }
+

@@ -17,7 +17,7 @@ public class DashboardUserSteps {
     DashboardPage dashboardPage;
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-    // ===== User Login =====
+    // ===== LOGIN =====
     @Given("regular user is logged into the dashboard")
     public void regular_user_is_logged_into_the_dashboard() {
         driver.get("http://localhost:8081/ui/login");
@@ -28,7 +28,7 @@ public class DashboardUserSteps {
         dashboardPage = new DashboardPage(driver);
     }
 
-    // ===== User Dashboard Verification =====
+    // ===== DASHBOARD PAGE =====
     @Then("dashboard page should load successfully for user")
     public void dashboard_page_should_load_successfully_for_user() {
         Assert.assertTrue(driver.getCurrentUrl().contains("/dashboard"),
@@ -47,7 +47,7 @@ public class DashboardUserSteps {
         Assert.assertTrue(dashboardPage.isDashboardMenuActive(), "Dashboard menu is not active");
     }
 
-    // ===== User Card Click Actions =====
+    // ===== CARD CLICKS =====
     @When("user clicks on Categories dashboard card")
     public void user_clicks_on_categories_dashboard_card() {
         dashboardPage.clickCategoryCard();
@@ -63,7 +63,7 @@ public class DashboardUserSteps {
         dashboardPage.clickSalesCard();
     }
 
-    // ===== User Navigation Verification =====
+    // ===== NAVIGATION VERIFICATION =====
     @Then("user should be navigated to Categories page")
     public void user_should_be_navigated_to_categories_page() {
         wait.until(ExpectedConditions.urlContains("/ui/categories"));
@@ -84,6 +84,25 @@ public class DashboardUserSteps {
         Assert.assertTrue(driver.getCurrentUrl().contains("/ui/sales"),
                 "User did not navigate to Sales page");
     }
-}
 
- 
+    // ===== SIDEBAR MENU =====
+    @When("user clicks on Categories menu")
+    public void user_clicks_on_categories_menu() {
+        dashboardPage.clickCategoriesMenu();
+    }
+
+    @When("user clicks on Plants menu")
+    public void user_clicks_on_plants_menu() {
+        dashboardPage.clickPlantsMenu();
+    }
+
+    @Then("Categories menu should be highlighted for user")
+    public void categories_menu_should_be_highlighted_for_user() {
+        Assert.assertTrue(dashboardPage.isCategoriesMenuActive(), "Categories menu is not highlighted");
+    }
+
+    @Then("Plants menu should be highlighted for user")
+    public void plants_menu_should_be_highlighted_for_user() {
+        Assert.assertTrue(dashboardPage.isPlantsMenuActive(), "Plants menu is not highlighted");
+    }
+}
