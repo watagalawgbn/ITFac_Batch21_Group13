@@ -5,12 +5,11 @@ import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
         features = "src/test/resources/features",
-        glue = "stepdefinitions",
-        
-
+        glue = {"stepdefinitions", "utils"},
+        tags = "@ui",
         plugin = {
                 "pretty",
-                "html:target/cucumber-reports.html"
+                "html:target/cucumber-reports-ui.html"
         },
         monochrome = true
 )
