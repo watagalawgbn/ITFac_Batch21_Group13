@@ -6,12 +6,12 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = {"stepdefinitions", "utils"},
-        tags = "@AdminTests",
+        tags = "@UiTests",
         plugin = {
                 "pretty",
-                "html:target/cucumber-reports-admin.html"
+                "html:target/cucumber-reports-ui.html"
         },
         monochrome = true
 )
-public class AdminTestRunner extends AbstractTestNGCucumberTests {
+public class TestRunner extends AbstractTestNGCucumberTests {
 }

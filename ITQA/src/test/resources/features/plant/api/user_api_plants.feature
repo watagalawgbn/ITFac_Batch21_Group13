@@ -1,3 +1,4 @@
+@ApiTests
 @NormalUserTests
 Feature: User Plant API
 

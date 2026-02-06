@@ -1,3 +1,4 @@
+@UiTests
 @NormalUserTests
 Feature: Normal User Plant Management
 

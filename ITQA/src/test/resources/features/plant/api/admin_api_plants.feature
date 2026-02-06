@@ -1,3 +1,4 @@
+@ApiTests
 @AdminTests
 Feature: Admin Plant API
 
