@@ -7,7 +7,7 @@ Feature: Login Page UI Validation
     Given the browser is opened
     And the base URL is configured
 
-  @UI @Login @TC-UI-LOGIN-01
+  @ui @Login @TC-UI-LOGIN-01
   Scenario: TC-UI-LOGIN-01 - Verify that the login page displays all required UI elements correctly
     When I navigate to the login page "/ui/login"
     Then the login page should be opened successfully
@@ -16,20 +16,20 @@ Feature: Login Page UI Validation
     And the login button should be displayed
     And all required UI elements should be properly aligned and visible
 
-  @UI @Login
+  @ui @Login
   Scenario: Verify login page URL is accessible
     When I navigate to the login page "/ui/login"
     Then the login page URL should be reachable in the browser
     And the page title should contain login information
 
-  @UI @Login
+  @ui @Login
   Scenario: Verify login page elements are enabled
     When I navigate to the login page "/ui/login"
     Then the username input field should be enabled
     And the password input field should be enabled
     And the login button should be enabled
 
-  @UI @Login @TC-UI-LOGIN-02 @Validation
+  @ui @Login @TC-UI-LOGIN-02 @Validation
   Scenario: TC-UI-LOGIN-02 - Verify validation messages for empty username and password fields
     When I navigate to the login page "/ui/login"
     And I clear all input fields
@@ -40,7 +40,7 @@ Feature: Login Page UI Validation
     And validation message should contain "Password is required"
     And the user should remain on the login page
 
-  @UI @Login @TC-UI-LOGIN-03 @InvalidLogin
+  @ui @Login @TC-UI-LOGIN-03 @InvalidLogin
   Scenario: TC-UI-LOGIN-03 - Verify error message for invalid login credentials
     When I navigate to the login page "/ui/login"
     And I enter invalid username "invaliduser@test.com"
@@ -51,7 +51,7 @@ Feature: Login Page UI Validation
     And the user should not be logged in
     And the user should remain on the login page
 
-  @UI @Login @TC-UI-LOGIN-04 @ValidLogin @Admin
+  @ui @Login @TC-UI-LOGIN-04 @ValidLogin @Admin
   Scenario: TC-UI-LOGIN-04 - Verify admin can login with valid credentials
     When I navigate to the login page "/ui/login"
     And I enter valid admin username "admin"
@@ -61,7 +61,7 @@ Feature: Login Page UI Validation
     And the admin should be redirected to admin dashboard
     And the admin should be logged in successfully
 
-  @UI @Login @TC-UI-LOGIN-05 @AdminAccess @Dashboard
+  @ui @Login @TC-UI-LOGIN-05 @AdminAccess @Dashboard
   Scenario: TC-UI-LOGIN-05 - Verify admin can view and access all admin-authorized features
     Given the admin has successfully logged in
     When the admin navigates through menu options
@@ -75,7 +75,7 @@ Feature: Login Page UI Validation
     And the admin should be able to access Sales feature
     And the admin can access each feature according to permissions
 
-  @UI @Login @TC-UI-LOGIN-07 @ValidLogin @User
+  @ui @Login @TC-UI-LOGIN-07 @ValidLogin @User
   Scenario: TC-UI-LOGIN-07 - Verify user can login with valid credentials
     When I navigate to the login page "/ui/login"
     And I enter valid user username "testuser"
@@ -85,7 +85,7 @@ Feature: Login Page UI Validation
     And the user should be redirected to user dashboard
     And the user should be logged in successfully
 
-  @UI @Login @TC-UI-LOGIN-08 @UserAccess @Dashboard @LimitedPermissions
+  @ui @Login @TC-UI-LOGIN-08 @UserAccess @Dashboard @LimitedPermissions
   Scenario: TC-UI-LOGIN-08 - Verify user can view but has limited access to features
     Given the user has successfully logged in
     When the user navigates through menu options

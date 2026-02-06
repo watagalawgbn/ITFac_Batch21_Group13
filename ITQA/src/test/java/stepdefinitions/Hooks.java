@@ -16,7 +16,7 @@ public class Hooks {
 
     // ========== UI TEST HOOKS ==========
 
-    @Before("@UI and @Admin")
+    @Before("@ui and @Admin")
     public void beforeUIAdminScenario(Scenario scenario) {
         System.out.println("\n========== STARTING UI ADMIN SCENARIO ==========");
 
@@ -27,7 +27,7 @@ public class Hooks {
         isUserLoggedIn = false;
     }
 
-    @Before("@UI and @User")
+    @Before("@ui and @User")
     public void beforeUIUserScenario(Scenario scenario) {
         System.out.println("\n========== STARTING UI USER SCENARIO ==========");
 
@@ -38,7 +38,7 @@ public class Hooks {
         isAdminLoggedIn = false;
     }
 
-    @Before("@UI and not @Admin and not @User")
+    @Before("@ui and not @Admin and not @User")
     public void beforeUIScenario(Scenario scenario) {
         System.out.println("\n========== STARTING UI SCENARIO ==========");
         // Always initialize a fresh driver for each scenario
@@ -47,7 +47,7 @@ public class Hooks {
 
     // ========== COMMON HOOKS ==========
 
-    @After(value = "@UI", order = 0)
+    @After(value = "@ui", order = 0)
     public void tearDownUI(Scenario scenario) {
         if (DriverFactory.getDriver() != null) {
             if (scenario.isFailed()) {

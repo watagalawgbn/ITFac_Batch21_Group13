@@ -1,4 +1,4 @@
-package stepdefinitions;
+package stepdefinitions.category.ui;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import pages.category.CategoryPage;
 import pages.dashboard.DashboardPage;
+import stepdefinitions.Hooks;
 
 public class CategorySteps {
 

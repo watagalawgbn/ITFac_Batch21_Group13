@@ -1,4 +1,4 @@
-package stepdefinitions;
+package stepdefinitions.sales.ui;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import pages.sales.SalesPage;
+import stepdefinitions.Hooks;
 
 public class SalesSteps {
 

@@ -55,4 +55,8 @@ public class ConfigReader {
                 properties.getProperty("explicit.wait", "15")
         );
     }
+
+    public static String get(String key) {
+        return properties.getProperty(key);
+    }
 }

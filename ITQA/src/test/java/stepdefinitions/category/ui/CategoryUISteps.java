@@ -1,4 +1,4 @@
-package stepdefinitions;
+package stepdefinitions.category.ui;
 
 import java.time.Duration;
 import java.util.List;
@@ -15,7 +15,7 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 
-import pages.CategoryListPage;
+import pages.category.CategoryListPage;
 import utils.DriverFactory;
 import org.testng.Assert;
 

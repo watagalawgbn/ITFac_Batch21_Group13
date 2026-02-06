@@ -7,7 +7,7 @@ Feature: Category Management - Admin
     Given the admin is logged into the system with username "admin" and password "admin123"
     And the admin has access to the category page
 
-  @UI @Category @TC-UI-CAT-01 @Admin @AddCategory
+  @ui @Category @TC-UI-CAT-01 @Admin @AddCategory
   Scenario: TC-UI-CAT-01 - Verify Add Category page opens successfully for admin
     Given the admin is on the Category List page "/ui/categories"
     When the admin clicks the "Add A Category" button
@@ -15,7 +15,7 @@ Feature: Category Management - Admin
     And the Category Name field should be displayed
     And the Parent Category dropdown should be displayed
 
-  @UI @Category @TC-UI-CAT-02 @Admin @Validation
+  @ui @Category @TC-UI-CAT-02 @Admin @Validation
   Scenario: TC-UI-CAT-02 - Verify Category Name field is mandatory
     Given the admin is on the Add Category form "/ui/categories/add"
     When the admin leaves the Category Name field empty
@@ -23,7 +23,7 @@ Feature: Category Management - Admin
     Then a validation message "Category name is required" should be displayed
     And the category should not be saved
 
-  @UI @Category @TC-UI-CAT-03 @Admin @MainCategory
+  @ui @Category @TC-UI-CAT-03 @Admin @MainCategory
   Scenario: TC-UI-CAT-03 - Verify admin can add a main category
     Given the admin is on the Add Category form "/ui/categories/add"
     When the admin enters Category Name "Tech"
@@ -33,7 +33,7 @@ Feature: Category Management - Admin
     And the category "Tech" should appear in the category list
     And a success message should be displayed
 
-  @UI @Category @TC-UI-CAT-04 @Admin @SubCategory
+  @ui @Category @TC-UI-CAT-04 @Admin @SubCategory
   Scenario: TC-UI-CAT-04 - Verify admin can add a sub-category
     Given the admin is on the Add Category form "/ui/categories/add"
     When the admin enters Category Name "Laptops"
@@ -43,7 +43,7 @@ Feature: Category Management - Admin
     And the category "Laptops" should appear under parent "Tech"
     And a success message should be displayed
 
-  @UI @Category @TC-UI-CAT-05 @Admin @MinLength @Validation
+  @ui @Category @TC-UI-CAT-05 @Admin @MinLength @Validation
   Scenario: TC-UI-CAT-05 - Verify minimum length validation for Category Name
     Given the admin is on the Add Category form "/ui/categories/add"
     When the admin enters Category Name "AB"
@@ -51,7 +51,7 @@ Feature: Category Management - Admin
     Then a validation message "Category name must be between 3 and 10 characters" should be displayed
     And the category should not be saved
 
-  @UI @Category @TC-UI-CAT-06 @Admin @MaxLength @Validation
+  @ui @Category @TC-UI-CAT-06 @Admin @MaxLength @Validation
   Scenario: TC-UI-CAT-06 - Verify maximum length validation for Category Name
     Given the admin is on the Add Category form "/ui/categories/add"
     When the admin enters Category Name "ThisIsAVeryLongCategoryName"
