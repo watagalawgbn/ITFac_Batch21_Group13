@@ -1,11 +1,12 @@
 package utils;
 
 import io.restassured.RestAssured;
+import org.testng.annotations.BeforeClass;
 
-public class ApiConfig {
+public class BaseApiTest {
 
-    public static void setBaseURI() {
+    @BeforeClass
+    public void setup() {
         RestAssured.baseURI = "http://localhost:8081";
     }
-
 }
