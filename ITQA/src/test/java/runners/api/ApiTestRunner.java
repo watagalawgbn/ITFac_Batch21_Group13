@@ -11,7 +11,8 @@ import org.testng.annotations.DataProvider;
                 "pretty",
                 "html:target/cucumber-reports/api-cucumber-report.html",
                 "json:target/cucumber-reports/api-cucumber.json",
-                "junit:target/cucumber-reports/api-cucumber.xml"
+                "junit:target/cucumber-reports/api-cucumber.xml",
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         },
         tags = "@API", // Run all API tests, can be overridden with -Dcucumber.filter.tags
         monochrome = true

@@ -10,7 +10,8 @@ import io.cucumber.testng.CucumberOptions;
                 "pretty",
                 "html:target/cucumber-reports.html",
                 "json:target/cucumber.json",
-                "junit:target/cucumber.xml"
+                "junit:target/cucumber.xml",
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         },
         monochrome = true,
         tags = "@UI" // Run all UI tests, can be overridden with -Dcucumber.filter.tags
