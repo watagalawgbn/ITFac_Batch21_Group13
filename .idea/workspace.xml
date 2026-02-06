@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a41fb35f-c198-4b7c-9bb3-d8daa54b31ed" name="Changes" comment="Add folder structure">
+      <change afterPath="$PROJECT_DIR$/ITQA/src/test/java/pages/category/CategoryListPage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ITQA/src/test/java/stepdefinitions/SampleSteps.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ITQA/src/test/resources/features/category/api/category_admin_api.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ITQA/src/test/resources/features/category/api/category_user_api.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ITQA/src/test/resources/features/category/ui/category_admin_ui.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ITQA/src/test/resources/features/category/ui/category_user_ui.feature" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ITQA/src/test/resources/features/sample.feature" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/java/pages/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/java/pages/LoginPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/java/pages/sales/SalesPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/java/pages/sales/SalesPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/java/runners/sales/api/ApiTestRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/java/runners/api/ApiTestRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/java/runners/sales/ui/TestRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/java/runners/ui/TestRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/java/stepdefinitions/sales/api/AdminSalesApiSteps.java" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/java/stepdefinitions/sales/api/AdminSalesApiSteps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/java/stepdefinitions/sales/ui/AdminSalesSteps.java" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/java/stepdefinitions/sales/ui/AdminSalesSteps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/java/stepdefinitions/sales/ui/UserSalesSteps.java" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/java/stepdefinitions/sales/ui/UserSalesSteps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/java/utils/AuthTokenUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/java/utils/AuthTokenUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/java/utils/DriverFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/java/utils/DriverFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/resources/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/resources/config.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/resources/features/sales/api/admin_sales_api.feature" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/resources/features/sales/api/admin_sales_api.feature" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/resources/features/sales/api/user_sales_api.feature" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/resources/features/sales/api/user_sales_api.feature" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/resources/features/sales/ui/admin_sales.feature" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/resources/features/sales/ui/admin_sales.feature" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ITQA/src/test/resources/features/sales/ui/user_sales.feature" beforeDir="false" afterPath="$PROJECT_DIR$/ITQA/src/test/resources/features/sales/ui/user_sales.feature" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "history": [
+    {
+      "assignee": "watagalawgbn"
+    }
+  ],
+  "lastFilter": {
+    "assignee": "watagalawgbn"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="a5049906-08e4-482e-88b3-7de67058cfd4" />
+        <option name="url" value="https://github.com/watagalawgbn/ITFac_Batch21_Group13" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="39Hf9prJUnNHTavuBos4QyE5kyn" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Merging Buddhini",
+    "last_opened_file_path": "C:/Users/BUDDHINI/IdeaProjects/ITFac_Batch21_Group13",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\BUDDHINI\IdeaProjects\ITFac_Batch21_Group13\ITQA\src\test\java\runners" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="ITQA" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="ITQA" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a41fb35f-c198-4b7c-9bb3-d8daa54b31ed" name="Changes" comment="Add folder structure" />
+      <created>1770357780301</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1770357780301</updated>
+      <workItem from="1770357805857" duration="16532000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
