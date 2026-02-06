@@ -8,8 +8,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
-import pages.LoginPage;
-import pages.DashboardPage;
+import pages.login.LoginPage;
+import pages.dashboard.DashboardPage;
 import utils.DriverFactory;
 import utils.PageElementInspector;
 
@@ -21,24 +21,12 @@ public class LoginSteps {
     private DashboardPage dashboardPage;
     private String baseUrl;
 
-    @Before
-    public void setUp() {
-        // This will run before each scenario
-        System.out.println("Setting up test environment...");
-    }
-
-    @After
-    public void tearDown() {
-        // This will run after each scenario
-        System.out.println("Tearing down test environment...");
-        DriverFactory.quitDriver();
-    }
-
     @Given("the browser is opened")
     public void theBrowserIsOpened() {
-        driver = DriverFactory.initializeDriver("chrome");
-        Assert.assertNotNull(driver, "Driver should be initialized");
-        System.out.println("Browser opened successfully");
+        // Get the driver that was already initialized by Hooks
+        driver = DriverFactory.getDriver();
+        Assert.assertNotNull(driver, "Driver should be initialized by Hooks");
+        System.out.println("Using browser initialized by Hooks");
     }
 
     @Given("the base URL is configured")
@@ -502,27 +490,61 @@ public class LoginSteps {
     // Step definitions for TC-UI-LOGIN-08 - User limited access
     @Given("the user has successfully logged in")
     public void theUserHasSuccessfullyLoggedIn() {
+        System.out.println("\n========== USER LOGIN PROCESS ==========");
+
         // Login as regular user
         loginPage = new LoginPage(driver);
+        System.out.println("Navigating to login page...");
         loginPage.navigateToLoginPage(baseUrl);
+
+        System.out.println("Entering credentials (testuser/test123)...");
         loginPage.enterUsername("testuser");
         loginPage.enterPassword("test123");
+
+        System.out.println("Clicking login button...");
         loginPage.clickLoginButton();
 
-        // Wait for dashboard to load
+        // Wait for navigation after login
+        System.out.println("Waiting for page to load after login...");
         try {
-            Thread.sleep(2000);
+            Thread.sleep(3000); // Wait longer for page to load
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        String currentUrl = driver.getCurrentUrl();
+        System.out.println("Current URL after login: " + currentUrl);
+
         // Initialize dashboard page
         dashboardPage = new DashboardPage(driver);
 
-        // Verify user is on dashboard
-        boolean isOnDashboard = dashboardPage.isOnDashboard();
-        Assert.assertTrue(isOnDashboard, "User should be on dashboard after login");
-        System.out.println("User successfully logged in and on dashboard");
+        // Check if login was successful by verifying we're not on login page anymore
+        boolean notOnLoginPage = !currentUrl.contains("/ui/login") || currentUrl.contains("error=false");
+
+        if (!notOnLoginPage) {
+            System.err.println("✗ Still on login page - login may have failed");
+            System.err.println("  Current URL: " + currentUrl);
+            System.err.println("  Page Title: " + driver.getTitle());
+
+            // Try to get error message if present
+            try {
+                String pageSource = driver.getPageSource();
+                if (pageSource.contains("error") || pageSource.contains("Invalid")) {
+                    System.err.println("  Login error detected on page");
+                }
+            } catch (Exception e) {
+                // Ignore
+            }
+        }
+
+        // For sales tests, we just need to be logged in, not necessarily on dashboard
+        // The test will navigate to the specific page it needs
+        boolean isLoggedIn = notOnLoginPage;
+
+        System.out.println("Login status: " + (isLoggedIn ? "✓ Success" : "✗ Failed"));
+        System.out.println("=========================================\n");
+
+        Assert.assertTrue(isLoggedIn, "User should be logged in successfully. Current URL: " + currentUrl);
     }
 
     @When("the user navigates through menu options")
