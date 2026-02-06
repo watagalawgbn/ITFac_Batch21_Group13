@@ -9,7 +9,7 @@ import io.cucumber.testng.CucumberOptions;
                 "stepdefinitions.sales.api",
                 "utils"
         },
-        tags = "@admin",
+        tags = "@user",
         plugin = {
                 "pretty",
                 "html:target/cucumber-reports-sales-api.html"
