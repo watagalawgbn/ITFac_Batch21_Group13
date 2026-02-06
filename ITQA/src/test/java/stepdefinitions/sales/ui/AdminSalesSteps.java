@@ -1,12 +1,12 @@
-package stepdefinitions;
+package stepdefinitions.sales.ui;
 
 import io.cucumber.java.en.*;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import pages.DashboardPage;
 import pages.LoginPage;
-import pages.SalesPage;
-import pages.SellPlantPage;
+import pages.sales.SalesPage;
+import pages.sales.SellPlantPage;
 import utils.DriverFactory;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class AdminSalesSteps {
         dashboardPage = loginPage.login("admin", "admin123");
     }
 
-    //SALES LIST
+    //TC_UI_Sales_1 - SALES LIST______________________________________________________________________________________
     @When("Admin navigates to the sales list page")
     public void admin_navigates_to_the_sales_list_page(){
         salesPage = dashboardPage.goToSalesPage();
@@ -39,7 +39,7 @@ public class AdminSalesSteps {
                 "Sales list page is not displayed.");
     }
 
-    //SELL PLANT BUTTON
+    //TC_UI_Sales_8 - SELL PLANT BUTTON__________________________________________________________________________________
     @Then("Sell plant button should be visible")
     public void Sell_plant_button_should_be_visible(){
         Assert.assertTrue(
@@ -48,7 +48,7 @@ public class AdminSalesSteps {
         );
     }
 
-    //SELL PLANT PAGE
+    //TC_UI_Sales_10 ____________________________________________________________________________________________________
     @And("Admin navigates to sell plant page")
     public void admin_navigates_to_sell_plant_page(){
         salesPage = new SalesPage(DriverFactory.getDriver());
@@ -69,6 +69,7 @@ public class AdminSalesSteps {
         }
     }
 
+    //TC_UI_Sales_11 _______________________________________________________________________________________________________
     @And("Admin selects a plant with available stock")
     public void admin_selects_a_plant_with_available_stock(){
         sellPlantPage.selectFirstAvailablePlant();
@@ -100,7 +101,7 @@ public class AdminSalesSteps {
                 "Admin was not redirected to sales list page");
     }
 
-    //DELETE
+    //TC_UI_Sales_17 - DELETE________________________________________________________________________________________
     @And("At least one sale record exists")
     public void at_least_one_sale_record_exists(){
         Assert.assertTrue(

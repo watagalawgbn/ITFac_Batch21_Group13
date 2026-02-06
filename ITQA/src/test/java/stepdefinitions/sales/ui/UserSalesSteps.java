@@ -1,10 +1,10 @@
-package stepdefinitions;
+package stepdefinitions.sales.ui;
 
 import io.cucumber.java.en.*;
 import org.testng.Assert;
 import pages.DashboardPage;
 import pages.LoginPage;
-import pages.SalesPage;
+import pages.sales.SalesPage;
 import utils.DriverFactory;
 
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ public class UserSalesSteps {
     private List<String> firstPageSales;
 
 
-    //VIEW SALE LIST____________________________________________________________
+    //TC_UI_Sales_18 - VIEW SALE LIST____________________________________________________________
     @Given("User is logged in")
     public void user_is_logged_in() {
         loginPage = new LoginPage(DriverFactory.getDriver());
@@ -42,7 +42,7 @@ public class UserSalesSteps {
                 "Sales list or No Sales message is not visible to the user");
     }
 
-    //CHECK FOR PAGINATION____________________________________________________________
+    //TC_UI_Sales_19 - CHECK FOR PAGINATION____________________________________________________________
     @And("Pagination controls are visible")
     public void pagination_controls_are_visible() {
         Assert.assertTrue(
@@ -75,7 +75,7 @@ public class UserSalesSteps {
         );
     }
 
-    //NO SALES MESSAGE_______________________________________________________________-
+    //TC_UI_Sales_20- NO SALES MESSAGE_______________________________________________________________-
     @Then("No sales message should be displayed to the user")
     public void no_sales_message_should_be_displayed_to_user() {
 
@@ -86,7 +86,7 @@ public class UserSalesSteps {
     }
 
 
-    //SELL BUTTON NOT VISIBLE TO USER________________________________________
+    //TC_UI_Sales_25 - SELL BUTTON NOT VISIBLE TO USER________________________________________
     @Then("Sell Plant button should not be visible to the user")
     public void sell_plant_button_should_not_be_visible_to_user() {
 
@@ -96,7 +96,7 @@ public class UserSalesSteps {
         );
     }
 
-    //SORTING_______________________________________________________________
+    //TC_UI_Sales_24 - SORTING_______________________________________________________________
     @Then("Sales should be sorted by sold date in descending order")
     public void sales_should_be_sorted_by_sold_date_desc() {
 

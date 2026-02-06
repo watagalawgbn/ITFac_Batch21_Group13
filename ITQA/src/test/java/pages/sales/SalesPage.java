@@ -1,4 +1,4 @@
-package pages;
+package pages.sales;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -7,7 +7,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -75,6 +74,8 @@ public class SalesPage {
         wait.until(ExpectedConditions.elementToBeClickable(sellPlantButton)).click();
         return new SellPlantPage(driver);
     }
+
+
 
     public int getSalesCount(){
         List<WebElement> rows = driver.findElements(salesRows);
@@ -156,13 +157,5 @@ public class SalesPage {
                 .map(e -> LocalDateTime.parse(e.getText(), formatter))
                 .toList();
     }
-
-
-
-    public void clickSoldDateHeader() {
-        wait.until(ExpectedConditions.elementToBeClickable(soldDateHeader)).click();
-    }
-
-
 
 }

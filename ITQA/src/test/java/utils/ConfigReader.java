@@ -5,14 +5,20 @@ import java.util.Properties;
 
 public class ConfigReader {
 
-    private static final Properties properties = new Properties();
+    private static Properties properties = new Properties();
 
     static {
         try (InputStream input =
-                     ConfigReader.class.getClassLoader().getResourceAsStream("config.properties")) {
+                     ConfigReader.class.getClassLoader()
+                             .getResourceAsStream("config.properties")) {
+
+            if (input == null) {
+                throw new RuntimeException("config.properties not found");
+            }
             properties.load(input);
+
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load config.properties");
+            throw new RuntimeException(e);
         }
     }
 

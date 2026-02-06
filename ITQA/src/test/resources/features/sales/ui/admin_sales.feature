@@ -1,21 +1,29 @@
 Feature: Admin sales management
 
+  @admin
+  #TC_UI_Sales_1
   Scenario: Admin can view the sales list page
     Given Admin is logged in
     When Admin navigates to the sales list page
     Then Sales list should be displayed
 
+  @admin
+  #TC_UI_Sales_8
   Scenario: Sell plant button is visible only to admin
     Given Admin is logged in
     When Admin navigates to the sales list page
     Then Sell plant button should be visible
 
+  @admin
+  #TC_UI_Sales_10
   Scenario: Admin sees only plants with available stock
     Given Admin is logged in
     When Admin navigates to the sales list page
     And Admin navigates to sell plant page
     Then Plant dropdown show only plants with stock greater than zero
 
+  @admin
+  #TC_UI_Sales_11
   Scenario: Admin can create a sale with valid plant and quantity
     Given Admin is logged in
     When Admin navigates to the sales list page
@@ -26,6 +34,8 @@ Feature: Admin sales management
     Then Sale should be created successfully
     And Admin should be redirected to the sales list page
 
+  @admin
+  #TC_UI_Sales_17
   Scenario: Admin can delete a sale successfully
     Given Admin is logged in
     When Admin navigates to the sales list page
