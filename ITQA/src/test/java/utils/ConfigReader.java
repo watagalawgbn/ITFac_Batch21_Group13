@@ -9,8 +9,8 @@ public class ConfigReader {
 
     static {
         try (InputStream input =
-                ConfigReader.class.getClassLoader()
-                        .getResourceAsStream("config.properties")) {
+                     ConfigReader.class.getClassLoader()
+                             .getResourceAsStream("config.properties")) {
 
             if (input == null) {
                 throw new RuntimeException("config.properties not found");
