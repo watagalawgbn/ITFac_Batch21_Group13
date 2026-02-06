@@ -20,7 +20,7 @@ public class DashboardAdminSteps {
     // ===== LOGIN =====
     @Given("admin is logged into the dashboard")
     public void admin_is_logged_into_the_dashboard() {
-        driver.get("http://localhost:8081/ui/login");
+        driver.get("http://localhost:8080/ui/login");
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin123");
         driver.findElement(By.cssSelector("button.btn.btn-primary.w-100.mb-3")).click();

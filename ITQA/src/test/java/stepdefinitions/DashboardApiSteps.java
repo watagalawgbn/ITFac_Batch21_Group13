@@ -20,7 +20,7 @@ public class DashboardApiSteps {
     // Base URI setup for all API requests
     @Before
     public void setup() {
-        RestAssured.baseURI = "http://localhost:8081";
+        RestAssured.baseURI = "http://localhost:8080";
     }
 
     // Get token for Admin or User
