@@ -17,4 +17,7 @@
 .DS_Store
 Thumbs.db
 
+# properties files
+*.properties
+
 
