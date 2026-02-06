@@ -7,11 +7,12 @@ public class Hooks {
 
     @Before
     public void setUp() {
-        DriverManager.initializeDriver("chrome");
+        // This initializes the driver
+        DriverFactory.getDriver();
     }
 
     @After
     public void tearDown() {
-        DriverManager.quitDriver();
+        DriverFactory.quitDriver();
     }
 }

@@ -1,4 +1,4 @@
-@UiTests
+@ui
 @AdminTests
 Feature: Admin User Plant Management
 

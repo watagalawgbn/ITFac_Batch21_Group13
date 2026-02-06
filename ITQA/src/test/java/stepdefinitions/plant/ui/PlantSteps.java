@@ -11,7 +11,7 @@ import org.testng.Assert;
 import pages.plant.AddPlantPage;
 import pages.plant.LoginPage;
 import pages.plant.PlantsPage;
-import utils.DriverManager;
+import utils.DriverFactory;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class PlantSteps {
     private AddPlantPage addPlantPage;
 
     public PlantSteps() {
-        this.driver = DriverManager.getDriver();
+        this.driver = DriverFactory.getDriver();
         this.loginPage = new LoginPage(driver);
         this.plantsPage = new PlantsPage(driver);
         this.addPlantPage = new AddPlantPage(driver);

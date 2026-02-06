@@ -3,7 +3,7 @@ package pages.plant;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import utils.DriverManager;
+import utils.DriverFactory;
 
 public class LoginPage {
     private WebDriver driver;
