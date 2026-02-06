@@ -20,28 +20,19 @@ public class DashboardApiSteps {
     // Base URI setup for all API requests
     @Before
     public void setup() {
-        RestAssured.baseURI = "http://localhost:8080";
+        RestAssured.baseURI = "http://localhost:8081";
     }
 
     // Get token for Admin or User
-    @Given("{string} token is available")
-    public void token_is_available(String role) {
-        switch (role.toLowerCase()) {
-            case "admin":
-                token = AuthTokenUtil.getAdminToken();
-                break;
-            case "user":
-                token = AuthTokenUtil.getUserToken();
-                break;
-            default:
-                Assert.fail("Invalid role provided: " + role);
-        }
-        Assert.assertNotNull(token, role + " token should not be null");
+    @Given("{string} token is available for dashboard")
+    public void user_or_admin_is_authenticated_for_dashboard(String role) {
+        token = AuthTokenUtil.authenticate(role);
+        System.out.println(role + " token: " + token);
     }
 
     // Send GET request to API endpoint
-    @When("{string} sends GET request to {string}")
-    public void sends_get_request(String role, String endpoint) {
+    @When("{string} sends GET request from dashboard to {string}")
+    public void sends_get_request_from_dashboard(String role, String endpoint) {
         response = given()
                 .header("Authorization", "Bearer " + token)
                 .header("Accept", "application/json")
