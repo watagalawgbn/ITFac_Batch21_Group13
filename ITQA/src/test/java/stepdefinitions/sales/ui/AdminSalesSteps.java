@@ -4,7 +4,7 @@ import io.cucumber.java.en.*;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import pages.DashboardPage;
-import pages.LoginPage;
+import pages.LoginPageBuddhini;
 import pages.sales.SalesPage;
 import pages.sales.SellPlantPage;
 import utils.DriverFactory;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AdminSalesSteps {
 
-    private LoginPage loginPage;
+    private LoginPageBuddhini loginPageBuddhini;
     private DashboardPage dashboardPage;
     private SalesPage salesPage;
     private SellPlantPage sellPlantPage;
@@ -22,9 +22,9 @@ public class AdminSalesSteps {
     // LOGIN
     @Given("Admin is logged in")
     public void admin_is_logged_in(){
-        loginPage = new LoginPage(DriverFactory.getDriver());
-        loginPage.open();
-        dashboardPage = loginPage.login("admin", "admin123");
+        loginPageBuddhini = new LoginPageBuddhini(DriverFactory.getDriver());
+        loginPageBuddhini.open();
+        dashboardPage = loginPageBuddhini.login("admin", "admin123");
     }
 
     //TC_UI_Sales_1 - SALES LIST______________________________________________________________________________________
