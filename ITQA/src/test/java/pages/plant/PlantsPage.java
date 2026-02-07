@@ -357,5 +357,32 @@ public class PlantsPage {
         }
         return true;
     }
+
+    //To check the stock reduction for sales creation
+    public int getStockForPlant(String plantName) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        wait.until(d -> d.findElements(tableRows).size() > 0);
+
+        List<WebElement> rows = driver.findElements(tableRows);
+
+        // Remove stock info from selected plant
+        String selectedPlant = plantName.replaceAll("\\(Stock:.*\\)", "").trim();
+
+        for (WebElement row : rows) {
+            String name = row.findElement(By.xpath("./td[1]")).getText().trim();
+            if (name.equalsIgnoreCase(selectedPlant)) {
+                String qtyText = row.findElement(By.xpath("./td[4]")).getText().trim();
+                qtyText = qtyText.replaceAll("[^0-9]", "");
+                return Integer.parseInt(qtyText);
+            }
+        }
+
+        throw new AssertionError("Selected plant not found in Plants page table: " + plantName);
+    }
+
+
+
+
 }
 

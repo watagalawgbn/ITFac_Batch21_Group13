@@ -17,7 +17,7 @@ public class AdminSalesApiSteps {
     private Long plantId;
     private Long saleId;
 
-    // ----------------- Token -----------------
+    // ----------------- Token ----------------------------------------------------------------------
     @Given("{string} token is available")
     public void token_is_available(String role) {
         token = AuthTokenUtil.authenticate(role.toLowerCase());
@@ -45,7 +45,7 @@ public class AdminSalesApiSteps {
         assertNotNull(response.jsonPath().getList("$"), "Sales list should not be null");
     }
 
-    // ----------------- POST request -----------------
+    // ----------------- POST request ---------------------------------------------------------------------
     @Given("A plant with available stock exists")
     public void a_plant_with_available_stock_exists() {
         plantId = 3L;
@@ -54,7 +54,7 @@ public class AdminSalesApiSteps {
 
     @Given("A plant with no stock exists")
     public void a_plant_with_no_stock_exists() {
-        plantId = 1L;
+        plantId = 2L;
         assertNotNull(plantId);
     }
 
@@ -98,10 +98,10 @@ public class AdminSalesApiSteps {
         assertTrue(msg.toLowerCase().contains("quantity"));
     }
 
-    // ----------------- DELETE request -----------------
+    // ----------------- DELETE request ---------------------------------------------------------------------
     @Given("A sale record exists")
     public void a_sale_record_exists() {
-        plantId = 2L;
+        plantId = 3L;
         response = given()
                 .header("Authorization", "Bearer " + token)
                 .pathParam("plantId", plantId)
@@ -131,7 +131,7 @@ public class AdminSalesApiSteps {
         assertEquals(getResponse.getStatusCode(), 404);
     }
 
-    // ----------------- GET Sales with pagination -----------------
+    // ----------------- GET Sales with pagination ---------------------------------------------------------------------
     @When("{string} sends GET request to {string} with page {int} and size {int}")
     public void sends_get_request_with_page_and_size(String role, String endpoint, int page, int size) {
         response = given()

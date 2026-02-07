@@ -14,10 +14,10 @@ import java.util.List;
 public class SalesPage {
     private final WebDriver driver;
     private final WebDriverWait wait;
-    //locator for the sales table
+
+    //locators
     private final By salesTable = By.cssSelector("table.table-bordered.table-striped.align-middle");
     private final By salesRows = By.xpath("//table//tbody/tr");
-
     private final By deleteButtonInRow = By.xpath(".//button[contains(@class,'btn-outline-danger')]");
     private final By noSalesMessage = By.xpath("//*[text() = 'No sales found']");
     private final By sellPlantButton = By.xpath("//a[contains(text(), 'Sell Plant')]");
@@ -26,7 +26,6 @@ public class SalesPage {
     private final By pagination = By.cssSelector("ul.pagination");
     // page numbers except active one
     private final By paginationPages = By.cssSelector("ul.pagination li.page-item:not(.active):not(.disabled) a.page-link");
-
     private final By soldDateColumn = By.xpath("//table//tbody/tr/td[4]");
     private final By soldDateHeader = By.xpath("//th[contains(text(),'Sold Date')]");
 
@@ -36,6 +35,7 @@ public class SalesPage {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
+
 
     public boolean isSalesListDisplayed(){
         try{

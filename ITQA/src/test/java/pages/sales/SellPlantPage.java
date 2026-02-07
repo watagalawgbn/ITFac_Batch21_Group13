@@ -8,9 +8,12 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
+
 public class SellPlantPage {
     private final WebDriver driver;
     private final WebDriverWait wait;
+
+    //locators
     private final By plantDropdown = By.id("plantId");
     private final By plantOptions = By.xpath("//select[@id='plantId']/option");
     private final By quantityInput = By.id("quantity");
@@ -34,24 +37,37 @@ public class SellPlantPage {
         return dropdown.findElements(By.tagName("option"));
     }
 
+    private String selectedPlantName;
+
     public void selectFirstAvailablePlant() {
-        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(plantDropdown));
-        dropdown.click();
+        WebElement dropdown = driver.findElement(plantDropdown);
+        Select select = new Select(dropdown);
 
-        List<WebElement> options = getPlantOptions();
+        WebElement option = select.getOptions().stream()
+                .filter(o -> {
+                    String text = o.getText(); // e.g., "Lemon (Stock: 92)"
+                    if (text == null || !text.contains("Stock")) return false;
 
-        // Start from index 1 to skip the first placeholder option
-        for (int i = 1; i < options.size(); i++) {
-            WebElement option = options.get(i);
-            String text = option.getText();
-            if (!text.contains("(0)")) {
-                option.click(); // click triggers selection
-                return;
-            }
-        }
+                    // Extract number
+                    try {
+                        String number = text.replaceAll(".*Stock: (\\d+).*", "$1");
+                        return Integer.parseInt(number) > 0;
+                    } catch (NumberFormatException e) {
+                        return false;
+                    }
+                })
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No plant with stock found"));
 
-        throw new RuntimeException("No plant with available stock found");
+        selectedPlantName = option.getText().trim();
+        select.selectByVisibleText(selectedPlantName);
     }
+
+
+    public String getSelectedPlantName() {
+        return selectedPlantName;
+    }
+
 
     public void enterQuantity(int quantity){
         WebElement qty = wait.until(ExpectedConditions.visibilityOfElementLocated(quantityInput));
